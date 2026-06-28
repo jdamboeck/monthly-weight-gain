@@ -1,0 +1,14 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*~
+.*.swp
+.idea/
+.vscode/
+
+# runtime / local
+*.log
+.cache/
+
+# local data exports (the app's JSON backups, if saved into the repo dir)
+mwg-backup*.json
