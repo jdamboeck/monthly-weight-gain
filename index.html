@@ -568,7 +568,9 @@ function shoppingList(fromISO,toISO){
   }
   fresh.sort((a,b)=>b.cost-a.cost); pantry.sort((a,b)=>b.cost-a.cost);
   const liters=days*state.settings.waterPerDayL;
-  const water={ liters, cost:liters*state.settings.waterPricePerL };
+  const waterStock=stockOf("_water");
+  const waterToBuy=Math.max(0,liters-waterStock);
+  const water={ liters, stock:waterStock, toBuy:waterToBuy, cost:waterToBuy*state.settings.waterPricePerL };
   const total=[...fresh,...pantry].reduce((a,l)=>a+l.cost,0)+water.cost;
   return { fresh, pantry, water, total, days };
 }
@@ -587,7 +589,8 @@ function monthlyBudget(){
   const {totals}=accumulate(startDate,monthEnd);
   let pantryCost=0;
   for(const k of Object.keys(totals)){ if(ing(k).group==="pantry"){ pantryCost+=lineFor(k,totals[k],byPack).cost; } }
-  const waterCost=planDays*state.settings.waterPerDayL*state.settings.waterPricePerL;
+  const waterLiters=Math.max(0, planDays*state.settings.waterPerDayL - stockOf("_water"));
+  const waterCost=waterLiters*state.settings.waterPricePerL;
   const total=freshCost+pantryCost+waterCost;
   return { fresh:freshCost, pantry:pantryCost, water:waterCost, total, cap:budgetCap, buffer:budgetCap-total };
 }
@@ -652,7 +655,8 @@ function viewToday(){
   }).join("");
 
   const wl=waterLoggedFor(iso);
-  const waterBtns=[0.5,1,1.5,2].map(v=>`<button data-water="${v}" aria-pressed="${wl===v}">${v.toFixed(1).replace(/\.0$/,v===0.5?"":".0")}</button>`).join("");
+  const waterSteps=[]; for(let v=0.5; v<=state.settings.waterPerDayL+1e-9; v+=0.5) waterSteps.push(Math.round(v*10)/10);
+  const waterBtns=waterSteps.map(v=>`<button data-water="${v}" aria-pressed="${wl===v}">${v}</button>`).join("");
 
   return screen("today",
     `<div class="section-title">Day ${rDay} of ${state.rotation.length} · ${fmtDate(iso)}<span class="spacer">${cyc?`cycle ${cyc} / 10`:'pre-plan'}</span></div>
@@ -810,8 +814,10 @@ function viewShopping(){
     <span class="loot__pack">${esc(l.packStr)}</span><span class="loot__price">${l.cost.toFixed(2)}</span>${boughtBtn}</div>`;
   }).join("");
 
-  // collapsible stock editor over all ingredients
-  const stockRows=Object.keys(state.ingredients).map(k=>{
+  // collapsible stock editor: water first, then every ingredient
+  const waterStockRow=`<div class="stock-row"><span class="stock-row__name">💧 Bottled water</span>
+      <input class="input num stock-input" value="${stockOf("_water")}" inputmode="decimal" data-stock="_water" aria-label="Bottled water in stock"><span class="stock-row__u">L</span></div>`;
+  const stockRows=waterStockRow+Object.keys(state.ingredients).map(k=>{
     const g=state.ingredients[k];
     return `<div class="stock-row"><span class="stock-row__name">${esc(g.name)}</span>
       <input class="input num stock-input" value="${stockOf(k)}" inputmode="decimal" data-stock="${k}" aria-label="${esc(g.name)} in stock"><span class="stock-row__u">${esc(g.unit)}</span></div>`;
@@ -848,7 +854,7 @@ function viewShopping(){
     <div class="loot-list">${lootRows(list.fresh)||'<div class="loot"><div class="loot__body"><div class="loot__need">nothing</div></div></div>'}</div>
     <div class="loot-head loot-head--pantry"><span class="ic">🫙</span><div><div class="nm">Pantry stock</div><div class="sub">bulk restock</div></div><span class="price">${fmtEUR(pantryTotal)}</span></div>
     <div class="loot-list">${lootRows(list.pantry)||'<div class="loot"><div class="loot__body"><div class="loot__need">nothing</div></div></div>'}</div>
-    <div class="loot-head loot-head--water"><span class="ic">💧</span><div><div class="nm">Water</div><div class="sub">${list.water.liters} L @ ${fmtEUR(state.settings.waterPricePerL)}/L</div></div><span class="price">${fmtEUR(list.water.cost)}</span></div>
+    <div class="loot-head loot-head--water"><span class="ic">💧</span><div><div class="nm">Water</div><div class="sub">${list.water.toBuy} L to buy @ ${fmtEUR(state.settings.waterPricePerL)}/L${list.water.stock>0?` · have ${list.water.stock} L`:` · ${list.water.liters} L needed`}</div></div>${list.water.toBuy>0?`<button class="loot__bought" data-bought="_water" title="Mark bought — adds ${list.water.toBuy} L to stock" style="margin-right:var(--s2)">✓ got it</button>`:''}<span class="price">${fmtEUR(list.water.cost)}</span></div>
     <div style="height:var(--s3)"></div>
     <div class="treasury">
       <div class="treasury__row">🛒 Fresh ${fmtEUR(freshTotal)} · 🫙 Pantry ${fmtEUR(pantryTotal)} · 💧 Water ${fmtEUR(list.water.cost)}</div>
@@ -1072,10 +1078,12 @@ function wire(route){
     app.querySelectorAll("[data-loot]").forEach(el=>{
       el.addEventListener("click",e=>{ if(e.target.closest("[data-bought]")) return; el.classList.toggle("is-checked"); });
     });
-    // "✓ got it" → add the bought packs (in units) to stock
+    // "✓ got it" → add the bought amount to stock (water: exact litres; ingredients: full packs)
     app.querySelectorAll("[data-bought]").forEach(el=>el.addEventListener("click",e=>{
       e.stopPropagation();
-      const k=e.target.dataset.bought; const g=ing(k);
+      const k=e.target.dataset.bought;
+      if(k==="_water"){ const add=shoppingList(shopFrom,shopTo).water.toBuy; setState(s=>{ s.stock._water=(s.stock._water||0)+add; }); return; }
+      const g=ing(k);
       const line=lineFor(k, accumulate(shopFrom,shopTo).totals[k]||0, state.settings.shoppingByPack);
       setState(s=>{ s.stock[k]=(s.stock[k]||0)+line.packs*g.pack; });
     }));
@@ -1140,7 +1148,7 @@ function copyShopping(){
   const txt=[`Supply run · ${shopFrom} – ${shopTo} · ${list.days} days (to buy, net of stock)`,"",
     "🛒 FRESH", ...toBuy(list.fresh).map(line), "",
     "🫙 PANTRY", ...toBuy(list.pantry).map(line), "",
-    `💧 Water: ${list.water.liters} L (${fmtEUR(list.water.cost)})`, "",
+    `💧 Water: ${list.water.toBuy} L to buy (${fmtEUR(list.water.cost)})`, "",
     `TOTAL: ${fmtEUR(list.total)} (cap ${fmtEUR(state.settings.budgetCap)})`].join("\n");
   if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>alert("Shopping list copied ✓"),()=>fallbackCopy(txt)); }
   else fallbackCopy(txt);
