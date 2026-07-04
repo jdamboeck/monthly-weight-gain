@@ -196,6 +196,11 @@ input,select,button{font-family:inherit}
 .stop__meals{font-size:var(--t-xs);color:var(--mut);line-height:1.5}
 .stop__meals b{color:var(--ink);font-weight:700}
 .stop__stats{display:flex;gap:var(--s2);margin-top:var(--s2);flex-wrap:wrap}
+.slot-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s2);margin:var(--s2) 0}
+.slot-edit{display:flex;align-items:center;gap:6px;min-width:0}
+.slot-edit__ic{font-size:16px;line-height:1;flex:0 0 auto}
+.slot-select{min-height:38px;font-size:var(--t-xs);padding:0 26px 0 8px;background-position:calc(100% - 12px) center,calc(100% - 7px) center}
+@media (min-width:800px){.slot-grid{grid-template-columns:repeat(4,1fr)}.slot-select{font-size:var(--t-sm)}}
 .fuelcard{border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);border:1px solid color-mix(in srgb,var(--player) 30%,var(--line));background:var(--panel);margin-bottom:var(--s3)}
 .fuelcard__top{display:flex;align-items:center;gap:var(--s3);padding:var(--s4);background:linear-gradient(120deg,var(--player-fill),var(--panel));border-bottom:1px solid var(--line)}
 .fuelcard__emoji{font-size:30px;line-height:1}
@@ -677,8 +682,9 @@ function shortLabel(r){
 /* ---- JOURNEY (rotation) -------------------------------------------------- */
 function viewRotation(){
   const curDay=rotationDayFor(todayISO());
+  const recipeOpts=(sel)=>Object.keys(state.recipes).map(rk=>`<option value="${rk}" ${rk===sel?'selected':''}>${esc(state.recipes[rk].name)}</option>`).join("");
   const stops=state.rotation.map((day,i)=>{
-    const meals=SLOTS.map(s=>`<b>${esc(recipeOr(day[s]).name)}</b>`).join(" · ");
+    const meals=SLOTS.map(s=>`<label class="slot-edit"><span class="slot-edit__ic">${SLOT_META[s].icon}</span><select class="input slot-select" aria-label="Day ${i+1} ${s}" data-day="${i}" data-slot="${s}">${recipeOpts(day[s])}</select></label>`).join("");
     let kcal=0,protein=0,cost=0;
     for(const s of SLOTS){ const st=recipeStats(day[s]); kcal+=st.kcal;protein+=st.protein;cost+=st.cost; }
     const cls=i===curDay?'is-current':(i<curDay?'is-done':'');
@@ -686,7 +692,7 @@ function viewRotation(){
       <div class="stop__rail"><div class="stop__node">${i+1}</div><div class="stop__line"></div></div>
       <div class="stop__card">
         <div class="stop__top"><span class="stop__day">Day ${i+1}</span>${i===curDay?'<span class="pill pill--player" style="padding:2px 8px">▶ today</span>':''}</div>
-        <div class="stop__meals">${meals}</div>
+        <div class="slot-grid">${meals}</div>
         <div class="stop__stats">
           <span class="pill pill--energy">🔥 <span class="num">${fmtNum(kcal)}</span></span>
           <span class="pill pill--power">⚡ <span class="num">${Math.round(protein)}</span>g</span>
@@ -696,9 +702,9 @@ function viewRotation(){
     </div>`;
   }).join("");
   return screen("rotation",
-    `<div class="section-title">Journey · 6-stop loop<span class="spacer">repeats 5× → 30 days</span></div>
+    `<div class="section-title">Journey · ${state.rotation.length}-stop loop<span class="spacer">✎ tap a meal to swap</span></div>
      <div class="journey">${stops}</div>
-     <div class="info" style="margin-top:var(--s3)"><h3>How the loop works</h3><ul><li>Six days of meals repeat five times across the month.</li><li>Tuna-bean salad lands twice every six days.</li><li>Today's stop is highlighted; completed days turn green.</li></ul></div>`
+     <div class="info" style="margin-top:var(--s3)"><h3>Build your loop</h3><ul><li>Tap any meal slot to assign a different fuel card — day totals, the supply run and your quest all recompute instantly.</li><li>The ${state.rotation.length}-day loop repeats across the month; today's stop is highlighted, completed days turn green.</li></ul></div>`
   );
 }
 
@@ -930,6 +936,13 @@ function wire(route){
     if(jd) jd.addEventListener("change",e=>{ viewDate=e.target.value||todayISO(); render(); });
     const jt=app.querySelector("#jumpToday");
     if(jt) jt.addEventListener("click",()=>{ viewDate=todayISO(); render(); });
+  }
+
+  if(route==="rotation"){
+    app.querySelectorAll(".slot-select").forEach(el=>el.addEventListener("change",e=>{
+      const {day,slot}=e.target.dataset;
+      setState(s=>{ s.rotation[+day][slot]=e.target.value; });
+    }));
   }
 
   if(route==="recipes"){
