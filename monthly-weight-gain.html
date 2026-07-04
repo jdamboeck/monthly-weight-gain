@@ -286,6 +286,15 @@ select.input{-webkit-appearance:none;appearance:none;padding-right:32px;backgrou
 .info li{margin:4px 0}
 .empty{text-align:center;color:var(--mut);padding:var(--s6) var(--s4);border:1px dashed var(--line-2);border-radius:var(--radius)}
 .empty__icon{font-size:40px;display:block;margin-bottom:var(--s2);filter:grayscale(.3)}
+/* ---- DESKTOP: roomier single column ------------------------------------- */
+@media (min-width:800px){
+  .app,.tabbar__inner{max-width:760px}
+  .screen{padding:var(--s5) var(--s6) calc(96px + env(safe-area-inset-bottom))}
+  .codex .cell-input{width:64px;font-size:var(--t-sm);padding:6px 8px}
+  .codex .cell-name{font-size:var(--t-sm)}
+  .codex th{font-size:10px;letter-spacing:.04em}
+  .feedgrid{gap:var(--s3)}
+}
 @media print{
   :root{--bg:#fff;--panel:#fff;--panel-2:#fff;--panel-3:#fff;--ink:#000;--mut:#444;--faint:#666;--line:#bbb;--line-2:#999;--shadow:none;--shadow-up:none;color-scheme:light}
   body{background:#fff;background-image:none}
