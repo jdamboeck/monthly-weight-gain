@@ -453,6 +453,7 @@ function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;"
 function ing(key){ return state.ingredients[key]; }
 const MISSING_RECIPE={ name:"(empty slot)", kind:"shake", emoji:"⬚", items:[] };
 function recipeOr(rk){ return state.recipes[rk]||MISSING_RECIPE; }
+function defaultDay(s){ const k=Object.keys(s.recipes)[0]; return { morning:k, midday:k, afternoon:k, evening:k }; }
 function recipeStats(rk){
   const r = state.recipes[rk];
   let kcal=0, protein=0, cost=0;
@@ -691,7 +692,7 @@ function viewRotation(){
     return `<div class="stop ${cls}">
       <div class="stop__rail"><div class="stop__node">${i+1}</div><div class="stop__line"></div></div>
       <div class="stop__card">
-        <div class="stop__top"><span class="stop__day">Day ${i+1}</span>${i===curDay?'<span class="pill pill--player" style="padding:2px 8px">▶ today</span>':''}</div>
+        <div class="stop__top"><span class="stop__day">Day ${i+1}</span>${i===curDay?'<span class="pill pill--player" style="padding:2px 8px">▶ today</span>':''}${state.rotation.length>1?`<button class="ing-remove spacer" title="Remove day ${i+1}" aria-label="Remove day ${i+1}" data-delday="${i}">🗑</button>`:''}</div>
         <div class="slot-grid">${meals}</div>
         <div class="stop__stats">
           <span class="pill pill--energy">🔥 <span class="num">${fmtNum(kcal)}</span></span>
@@ -704,7 +705,8 @@ function viewRotation(){
   return screen("rotation",
     `<div class="section-title">Journey · ${state.rotation.length}-stop loop<span class="spacer">✎ tap a meal to swap</span></div>
      <div class="journey">${stops}</div>
-     <div class="info" style="margin-top:var(--s3)"><h3>Build your loop</h3><ul><li>Tap any meal slot to assign a different fuel card — day totals, the supply run and your quest all recompute instantly.</li><li>The ${state.rotation.length}-day loop repeats across the month; today's stop is highlighted, completed days turn green.</li></ul></div>`
+     <button class="btn btn--primary btn--block" id="addDay" style="margin-top:var(--s2)">＋ Add day to loop</button>
+     <div class="info" style="margin-top:var(--s3)"><h3>Build your loop</h3><ul><li>Tap any meal slot to assign a different fuel card — day totals, the supply run and your quest all recompute instantly.</li><li>Add or remove whole days (🗑) to make the loop longer or shorter; it repeats across the month.</li><li>Today's stop is highlighted; completed days turn green.</li></ul></div>`
   );
 }
 
@@ -942,6 +944,15 @@ function wire(route){
     app.querySelectorAll(".slot-select").forEach(el=>el.addEventListener("change",e=>{
       const {day,slot}=e.target.dataset;
       setState(s=>{ s.rotation[+day][slot]=e.target.value; });
+    }));
+    app.querySelector("#addDay")?.addEventListener("click",()=>{
+      setState(s=>{ const last=s.rotation[s.rotation.length-1]; s.rotation.push(last?{...last}:defaultDay(s)); });
+    });
+    app.querySelectorAll("[data-delday]").forEach(el=>el.addEventListener("click",e=>{
+      const i=+e.target.dataset.delday;
+      if(state.rotation.length<=1){ alert("The loop needs at least one day."); return; }
+      if(confirm(`Remove Day ${i+1} from the loop? The loop becomes ${state.rotation.length-1} days.`))
+        setState(s=>{ s.rotation.splice(i,1); });
     }));
   }
 
