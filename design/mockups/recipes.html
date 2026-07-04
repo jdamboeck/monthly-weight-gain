@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cards · Nana — Gain Quest</title>
+<link rel="stylesheet" href="../design-system.css">
+</head>
+<body>
+<div class="app">
+  <header class="hud">
+    <div class="hud__brand"><span class="mk">🍌</span><span class="nm">Nana<small>Gain Quest</small></span></div>
+    <div class="hud__stats">
+      <span class="hud-chip hud-chip--lvl">LVL <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--streak">🔥 <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--xp">✦ <span class="num">1,250</span></span>
+    </div>
+  </header>
+
+  <main class="screen">
+    <div class="section-title">Fuel cards · editable<span class="spacer">10 collected</span></div>
+
+    <!-- Dense collectible card: S3 (7 ingredients) -->
+    <section class="fuelcard">
+      <div class="fuelcard__top">
+        <span class="fuelcard__emoji">🥤</span>
+        <div>
+          <div class="fuelcard__id">S3 · SHAKE</div>
+          <div class="fuelcard__name">Cocoa-Banana</div>
+        </div>
+        <span class="fuelcard__rarity pill pill--player">★★★ epic fuel</span>
+      </div>
+      <div class="fuelcard__body">
+        <div class="ing-row">
+          <select class="input" aria-label="Ingredient"><option>Whole milk 3.5%</option><option>Greek yogurt 10%</option></select>
+          <input class="input num" value="500" inputmode="decimal" aria-label="Amount">
+          <span class="ing-unit">ml</span>
+          <span class="ing-stats"><b>320</b> kcal · €0.55</span>
+          <button class="ing-remove" aria-label="Remove">✕</button>
+        </div>
+        <div class="ing-row">
+          <select class="input" aria-label="Ingredient"><option>Oats</option></select>
+          <input class="input num" value="70" inputmode="decimal" aria-label="Amount">
+          <span class="ing-unit">g</span>
+          <span class="ing-stats"><b>259</b> kcal · €0.11</span>
+          <button class="ing-remove" aria-label="Remove">✕</button>
+        </div>
+        <div class="ing-row">
+          <select class="input" aria-label="Ingredient"><option>Banana</option></select>
+          <input class="input num" value="1" inputmode="decimal" aria-label="Amount">
+          <span class="ing-unit">ea</span>
+          <span class="ing-stats"><b>105</b> kcal · €0.20</span>
+          <button class="ing-remove" aria-label="Remove">✕</button>
+        </div>
+        <div class="ing-row">
+          <select class="input" aria-label="Ingredient"><option>Peanut butter</option></select>
+          <input class="input num" value="25" inputmode="decimal" aria-label="Amount">
+          <span class="ing-unit">g</span>
+          <span class="ing-stats"><b>147</b> kcal · €0.12</span>
+          <button class="ing-remove" aria-label="Remove">✕</button>
+        </div>
+        <div class="ing-row">
+          <select class="input" aria-label="Ingredient"><option>Cocoa powder</option></select>
+          <input class="input num" value="1" inputmode="decimal" aria-label="Amount">
+          <span class="ing-unit">tbsp</span>
+          <span class="ing-stats"><b>12</b> kcal · €0.06</span>
+          <button class="ing-remove" aria-label="Remove">✕</button>
+        </div>
+        <div class="ing-row">
+          <select class="input" aria-label="Ingredient"><option>Honey</option></select>
+          <input class="input num" value="1" inputmode="decimal" aria-label="Amount">
+          <span class="ing-unit">tbsp</span>
+          <span class="ing-stats"><b>64</b> kcal · €0.14</span>
+          <button class="ing-remove" aria-label="Remove">✕</button>
+        </div>
+        <div class="ing-row">
+          <select class="input" aria-label="Ingredient"><option>Almonds</option></select>
+          <input class="input num" value="15" inputmode="decimal" aria-label="Amount">
+          <span class="ing-unit">g</span>
+          <span class="ing-stats"><b>87</b> kcal · €0.19</span>
+          <button class="ing-remove" aria-label="Remove">✕</button>
+        </div>
+        <button class="ing-add">＋ add ingredient</button>
+      </div>
+      <div class="fuelcard__foot">
+        <span class="pill pill--energy"><span class="num">994</span> kcal</span>
+        <span class="pill pill--power">⚡ <span class="num">38</span> g</span>
+        <span class="total">€1.37</span>
+      </div>
+    </section>
+
+    <div class="section-title">Ingredient codex · inline-editable</div>
+    <div class="panel">
+      <div class="panel__pad" style="padding:var(--s2) var(--s4)">
+        <table style="width:100%;border-collapse:collapse;font-size:var(--t-sm)">
+          <thead>
+            <tr style="text-align:left;color:var(--mut);font-size:10px;letter-spacing:.08em;text-transform:uppercase">
+              <th style="padding:8px 4px;font-weight:900">Item</th>
+              <th style="padding:8px 4px;font-weight:900;text-align:right">kcal/u</th>
+              <th style="padding:8px 4px;font-weight:900;text-align:right">Pack €</th>
+              <th style="padding:8px 4px;font-weight:900">Loot</th>
+            </tr>
+          </thead>
+          <tbody class="num">
+            <tr style="border-top:1px solid var(--line)">
+              <td style="padding:6px 4px;font-family:var(--sans);font-weight:700">Whole milk 3.5%</td>
+              <td style="text-align:right"><input class="cell-input" value="0.64"></td>
+              <td style="text-align:right"><input class="cell-input" value="1.10"></td>
+              <td style="padding:6px 4px;font-family:var(--sans);color:var(--energy)">🛒 fresh</td>
+            </tr>
+            <tr style="border-top:1px solid var(--line);background:var(--player-fill)">
+              <td style="padding:6px 4px;font-family:var(--sans);font-weight:700">Oats</td>
+              <td style="text-align:right"><input class="cell-input" value="3.70"></td>
+              <td style="text-align:right"><input class="cell-input" value="0.81"></td>
+              <td style="padding:6px 4px;font-family:var(--sans);color:var(--power)">🫙 pantry</td>
+            </tr>
+            <tr style="border-top:1px solid var(--line)">
+              <td style="padding:6px 4px;font-family:var(--sans);font-weight:700">Peanut butter</td>
+              <td style="text-align:right"><input class="cell-input" value="5.88"></td>
+              <td style="text-align:right"><input class="cell-input" value="4.75"></td>
+              <td style="padding:6px 4px;font-family:var(--sans);color:var(--power)">🫙 pantry</td>
+            </tr>
+            <tr style="border-top:1px solid var(--line)">
+              <td style="padding:6px 4px;font-family:var(--sans);font-weight:700">Greek yogurt 10%</td>
+              <td style="text-align:right"><input class="cell-input" value="1.30"></td>
+              <td style="text-align:right"><input class="cell-input" value="1.79"></td>
+              <td style="padding:6px 4px;font-family:var(--sans);color:var(--energy)">🛒 fresh</td>
+            </tr>
+            <tr style="border-top:1px solid var(--line)">
+              <td style="padding:6px 4px;font-family:var(--sans);font-weight:700">Canned tuna</td>
+              <td style="text-align:right"><input class="cell-input" value="191"></td>
+              <td style="text-align:right"><input class="cell-input" value="0.90"></td>
+              <td style="padding:6px 4px;font-family:var(--sans);color:var(--energy)">🛒 fresh</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <button class="ing-add" style="margin-top:var(--s3)">＋ new ingredient</button>
+  </main>
+
+  <nav class="tabbar" aria-label="Screens">
+    <div class="tabbar__inner">
+      <a class="tab" href="today.html"><span class="ic">🍌</span>Today</a>
+      <a class="tab" href="rotation.html"><span class="ic">🗺️</span>Journey</a>
+      <a class="tab" aria-current="page" href="recipes.html"><span class="ic">🃏</span>Cards</a>
+      <a class="tab" href="shopping.html"><span class="ic">🎒</span>Supply</a>
+      <a class="tab" href="tracker.html"><span class="ic">🏁</span>Quest</a>
+      <a class="tab" href="settings.html"><span class="ic">⚙️</span>Setup</a>
+    </div>
+  </nav>
+</div>
+</body>
+</html>

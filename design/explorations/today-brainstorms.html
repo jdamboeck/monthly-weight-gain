@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today — 5 gamey brainstorms</title>
+<style>
+  :root{
+    --bg:#0e1016; --panel:#171a23; --panel2:#1f2330; --line:#2b3040;
+    --ink:#eef1f7; --mut:#9aa3b8; --faint:#6b7280;
+    --energy:#7bd154; --energy-d:#4ea832;
+    --power:#ffb13d; --power-d:#e0902a;
+    --player:#8b7bff; --player-d:#6a57f0;
+    --flame:#ff6a3d; --banana:#ffd23f;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:#0a0b10;color:var(--ink);font-family:var(--sans);
+    background-image:radial-gradient(900px 500px at 20% -10%,#1a1430 0,transparent 60%),radial-gradient(800px 500px at 110% 10%,#0c2018 0,transparent 55%);}
+  .head{padding:30px 34px 6px}
+  .head h1{margin:0;font-size:22px;letter-spacing:-.01em}
+  .head p{margin:6px 0 0;color:var(--mut);font-size:14px;max-width:760px}
+  .rail{display:flex;gap:34px;overflow-x:auto;padding:24px 34px 48px;align-items:flex-start}
+  .col{flex:0 0 auto;width:360px}
+  .tag{display:flex;align-items:baseline;gap:8px;margin:0 4px 12px}
+  .tag b{font-size:15px}
+  .tag span{font-size:12px;color:var(--mut)}
+  .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+  /* phone frame */
+  .phone{height:720px;border-radius:30px;background:var(--bg);border:1px solid var(--line);
+    box-shadow:0 24px 60px rgba(0,0,0,.5);overflow:hidden;position:relative;display:flex;flex-direction:column}
+  .sb{display:flex;justify-content:space-between;align-items:center;padding:12px 18px 6px;font-size:12px;color:var(--mut);font-family:var(--mono)}
+  .scr{flex:1;overflow:hidden;padding:6px 16px 16px;position:relative}
+  .h2{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);font-weight:800;margin:14px 4px 8px}
+  .pill{display:inline-flex;align-items:center;gap:5px;padding:3px 9px;border-radius:999px;font-size:11px;font-weight:800}
+
+  /* ---------- shared meal mini ---------- */
+  .meal{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:14px;background:var(--panel);border:1px solid var(--line);margin-bottom:8px}
+  .meal .ic{font-size:18px}
+  .meal .nm{font-size:13px;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .meal .kc{font-family:var(--mono);font-size:12px;color:var(--mut)}
+  .dot{width:26px;height:26px;border-radius:9px;border:2px solid var(--line);display:grid;place-content:center;font-size:14px;font-weight:900}
+  .dot.on{background:var(--energy);border-color:var(--energy);color:#08210a}
+
+  /* ============ 1 ROCKET FUEL ============ */
+  .rk-wrap{display:flex;gap:14px;align-items:stretch;margin-top:6px}
+  .tank{width:78px;border-radius:20px;background:var(--panel);border:1px solid var(--line);position:relative;overflow:hidden;flex:0 0 auto;height:300px}
+  .tank .fill{position:absolute;left:0;right:0;bottom:0;height:94%;background:linear-gradient(180deg,var(--energy),var(--energy-d));}
+  .tank .seg{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.12)}
+  .tank .lab{position:absolute;left:0;right:0;top:10px;text-align:center;font-family:var(--mono);font-size:11px;color:#08210a;font-weight:800}
+  .rk-side{flex:1;display:flex;flex-direction:column;gap:10px}
+  .gauge{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:11px 13px}
+  .gauge .t{font-size:11px;color:var(--mut);font-weight:700;text-transform:uppercase;letter-spacing:.06em}
+  .gauge .v{font-size:22px;font-weight:900;font-family:var(--mono)}
+  .bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden;margin-top:7px}
+  .bar i{display:block;height:100%;border-radius:99px}
+  .launch{margin-top:auto;background:linear-gradient(180deg,var(--flame),#d8431f);border:0;color:#fff;font-weight:900;font-size:15px;padding:13px;border-radius:16px;letter-spacing:.02em}
+
+  /* ============ 2 RPG QUEST ============ */
+  .rpg .hero{display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,#241c44,#191a2a);border:1px solid var(--player-d);border-radius:18px;padding:13px}
+  .rpg .av{width:50px;height:50px;border-radius:14px;background:var(--player);display:grid;place-content:center;font-size:26px;box-shadow:0 0 0 3px rgba(139,123,255,.25)}
+  .rpg .lvl{font-size:11px;color:#c9c2ff;font-weight:800;letter-spacing:.1em}
+  .rpg .nme{font-size:16px;font-weight:900}
+  .xpbar{height:10px;border-radius:99px;background:#0c0e18;border:1px solid var(--player-d);overflow:hidden;margin-top:6px}
+  .xpbar i{display:block;height:100%;background:linear-gradient(90deg,var(--player),#b9aaff)}
+  .quest{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:13px;background:var(--panel);border:1px dashed var(--line);margin-bottom:8px}
+  .quest .ic{font-size:17px}
+  .quest .nm{flex:1;font-size:13px;font-weight:700}
+  .quest .rw{font-family:var(--mono);font-size:11px;color:var(--banana);font-weight:800}
+  .quest.done{border-style:solid;border-color:var(--energy-d);background:#13251a}
+  .quest.done .nm{color:var(--mut);text-decoration:line-through}
+  .statrow{display:flex;gap:8px;margin-top:10px}
+  .stat{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:13px;padding:9px;text-align:center}
+  .stat b{display:block;font-family:var(--mono);font-size:18px}
+  .stat span{font-size:10px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+
+  /* ============ 3 RINGS ============ */
+  .rings{display:grid;place-items:center;margin:8px 0 4px}
+  .rings .ctr{position:absolute;text-align:center}
+  .rings .ctr b{font-family:var(--mono);font-size:30px;font-weight:900;display:block;line-height:1}
+  .rings .ctr span{font-size:11px;color:var(--mut)}
+  .legend{display:flex;justify-content:center;gap:14px;margin:6px 0 2px}
+  .legend div{font-size:11px;color:var(--mut);display:flex;align-items:center;gap:5px}
+  .legend i{width:9px;height:9px;border-radius:99px;display:inline-block}
+  .streak{display:flex;align-items:center;gap:10px;background:linear-gradient(135deg,#2a1410,#1b1410);border:1px solid #6a2f1d;border-radius:16px;padding:11px 13px;margin-top:8px}
+  .streak .f{font-size:26px}
+  .streak b{font-size:20px;font-family:var(--mono)}
+  .streak span{font-size:12px;color:var(--mut)}
+
+  /* ============ 4 MASCOT ============ */
+  .mascot{position:relative;border-radius:20px;padding:18px 14px 14px;background:radial-gradient(120% 90% at 50% 0,#23351c 0,#141a12 70%);border:1px solid #2f5226;text-align:center;overflow:hidden}
+  .buddy{font-size:74px;line-height:1;filter:drop-shadow(0 8px 14px rgba(0,0,0,.5));animation:bob 2.6s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-8px) rotate(3deg)}}
+  .moodbar{height:14px;border-radius:99px;background:#0c1209;border:1px solid #2f5226;overflow:hidden;margin:12px 6px 4px;position:relative}
+  .moodbar i{display:block;height:100%;background:linear-gradient(90deg,var(--energy-d),var(--energy));border-radius:99px}
+  .moodbar b{position:absolute;inset:0;display:grid;place-content:center;font-size:10px;font-weight:900;color:#fff;font-family:var(--mono);text-shadow:0 1px 2px #000}
+  .speech{display:inline-block;background:#fff;color:#15240f;font-size:12px;font-weight:800;padding:5px 11px;border-radius:12px;margin-bottom:6px}
+  .feedrow{display:flex;gap:8px;margin-top:10px}
+  .feed{flex:1;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 8px;text-align:center}
+  .feed .ic{font-size:20px}
+  .feed .nm{font-size:10px;color:var(--mut);margin-top:3px}
+  .feed.fed{background:#13251a;border-color:var(--energy-d)}
+
+  /* ============ 5 ARCADE ============ */
+  .arc{font-family:var(--mono)}
+  .arc .score{background:#05060a;border:2px solid var(--energy-d);border-radius:14px;padding:12px;box-shadow:inset 0 0 24px rgba(123,209,84,.18)}
+  .arc .lab{font-size:10px;letter-spacing:.2em;color:var(--energy)}
+  .arc .big{font-size:38px;font-weight:900;color:var(--energy);text-shadow:0 0 12px rgba(123,209,84,.6);letter-spacing:.04em}
+  .arc .hi{font-size:11px;color:var(--mut)}
+  .arc .combo{display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding:8px 12px;border:2px solid var(--power-d);border-radius:12px;color:var(--power);box-shadow:inset 0 0 20px rgba(255,177,61,.15)}
+  .arc .combo b{font-size:18px}
+  .arc .row{display:flex;align-items:center;gap:10px;padding:9px 11px;border-bottom:1px dashed var(--line)}
+  .arc .row .ic{font-size:15px}
+  .arc .row .nm{flex:1;font-size:12px;color:var(--ink)}
+  .arc .row .pts{color:var(--banana);font-size:12px}
+  .arc .pellets{display:flex;gap:6px;justify-content:center;margin-top:12px;font-size:16px}
+</style>
+</head>
+<body>
+  <div class="head">
+    <h1>Today screen · 5 gamey directions</h1>
+    <p>Same real plan (Day 1 of 6 · <b>3,011 / 3,200 kcal</b> · <b>114 g protein</b> · 2 of 4 meals logged · €6.14). Five ways to make hitting the daily target feel like playing. My pick is flagged below.</p>
+  </div>
+  <div class="rail">
+
+    <!-- 1 ROCKET -->
+    <div class="col">
+      <div class="tag"><b>1 · Fuel the Rocket</b><span>fill the tank to launch</span></div>
+      <div class="phone">
+        <div class="sb"><span>9:41</span><span>DAY 1/6 ▸ 🔥7</span></div>
+        <div class="scr">
+          <div class="h2">Launch fuel · 3,011 / 3,200</div>
+          <div class="rk-wrap">
+            <div class="tank">
+              <div class="fill"></div>
+              <div class="seg" style="bottom:25%"></div><div class="seg" style="bottom:50%"></div><div class="seg" style="bottom:75%"></div>
+              <div class="lab">94%</div>
+            </div>
+            <div class="rk-side">
+              <div class="gauge"><div class="t">⚡ Protein booster</div><div class="v">114g</div><div class="bar"><i style="width:100%;background:linear-gradient(90deg,var(--power-d),var(--power))"></i></div></div>
+              <div class="gauge"><div class="t">💧 Coolant</div><div class="v">1.0L</div><div class="bar"><i style="width:50%;background:#39a9d4"></i></div></div>
+              <div class="gauge" style="padding:8px 13px"><div class="t">💶 Budget</div><div class="v" style="font-size:16px">€6.14</div></div>
+            </div>
+          </div>
+          <div class="h2">Fuel cells</div>
+          <div class="meal"><span class="ic">🌅</span><span class="nm">S1 Peanut-Banana</span><span class="kc">1016</span><span class="dot on">✓</span></div>
+          <div class="meal"><span class="ic">☀️</span><span class="nm">Avocado-cheese bread</span><span class="kc">495</span><span class="dot on">✓</span></div>
+          <div class="meal"><span class="ic">🌤️</span><span class="nm">Yogurt+walnuts+kiwi</span><span class="kc">497</span><span class="dot">+</span></div>
+          <button class="launch">🚀 89 kcal to launch</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2 RPG -->
+    <div class="col">
+      <div class="tag"><b>2 · Quest Log (RPG)</b><span>meals = quests, protein = STR</span></div>
+      <div class="phone">
+        <div class="sb"><span>9:41</span><span>⚔️ GAINS RPG</span></div>
+        <div class="scr rpg">
+          <div class="hero">
+            <div class="av">🍌</div>
+            <div style="flex:1">
+              <div class="lvl">LVL 7 · BULK KNIGHT</div>
+              <div class="nme">Day 1 of 6</div>
+              <div class="xpbar"><i style="width:50%"></i></div>
+            </div>
+          </div>
+          <div class="statrow">
+            <div class="stat"><b style="color:var(--energy)">3011</b><span>Energy HP</span></div>
+            <div class="stat"><b style="color:var(--power)">114</b><span>STR · prot</span></div>
+            <div class="stat"><b style="color:var(--banana)">€6.14</b><span>Gold</span></div>
+          </div>
+          <div class="h2">Active quests · 2/4</div>
+          <div class="quest done"><span class="ic">🌅</span><span class="nm">S1 Peanut-Banana</span><span class="rw">+1016 XP</span></div>
+          <div class="quest done"><span class="ic">☀️</span><span class="nm">Avocado-cheese bread</span><span class="rw">+495 XP</span></div>
+          <div class="quest"><span class="ic">🌤️</span><span class="nm">Yogurt+walnuts+kiwi</span><span class="rw">+497 XP</span></div>
+          <div class="quest"><span class="ic">🌙</span><span class="nm">S2 Blueberry-Walnut</span><span class="rw">+1003 XP</span></div>
+          <div style="text-align:center;margin-top:10px;font-size:12px;color:var(--mut)">⭐ Clear all 4 → <b style="color:var(--banana)">Daily Boss bonus</b></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3 RINGS  (FAVORITE base) -->
+    <div class="col">
+      <div class="tag"><b>3 · Close the Rings</b><span style="color:var(--energy)">+ streak flame</span></div>
+      <div class="phone">
+        <div class="sb"><span>9:41</span><span>DAY 1/6</span></div>
+        <div class="scr">
+          <div class="rings" style="height:180px;position:relative">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <g fill="none" stroke-linecap="round">
+                <circle cx="90" cy="90" r="78" stroke="#1d2333" stroke-width="13"/>
+                <circle cx="90" cy="90" r="78" stroke="var(--energy)" stroke-width="13" stroke-dasharray="490" stroke-dashoffset="29" transform="rotate(-90 90 90)"/>
+                <circle cx="90" cy="90" r="60" stroke="#1d2333" stroke-width="13"/>
+                <circle cx="90" cy="90" r="60" stroke="var(--power)" stroke-width="13" stroke-dasharray="377" stroke-dashoffset="0" transform="rotate(-90 90 90)"/>
+                <circle cx="90" cy="90" r="42" stroke="#1d2333" stroke-width="13"/>
+                <circle cx="90" cy="90" r="42" stroke="#39a9d4" stroke-width="13" stroke-dasharray="264" stroke-dashoffset="132" transform="rotate(-90 90 90)"/>
+              </g>
+            </svg>
+            <div class="ctr"><b>94%</b><span>day complete</span></div>
+          </div>
+          <div class="legend">
+            <div><i style="background:var(--energy)"></i>3011 kcal</div>
+            <div><i style="background:var(--power)"></i>114 g</div>
+            <div><i style="background:#39a9d4"></i>1.0 L</div>
+          </div>
+          <div class="streak"><span class="f">🔥</span><div style="flex:1"><b>7-day</b> <span>streak · best 11</span></div><span class="pill" style="background:#3a1d12;color:var(--flame)">+50 XP</span></div>
+          <div class="h2">Today · 2 of 4</div>
+          <div class="meal"><span class="ic">🌅</span><span class="nm">S1 Peanut-Banana</span><span class="kc">1016</span><span class="dot on">✓</span></div>
+          <div class="meal"><span class="ic">🌤️</span><span class="nm">Yogurt+walnuts+kiwi</span><span class="kc">497</span><span class="dot">+</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 4 MASCOT (FAVORITE) -->
+    <div class="col">
+      <div class="tag"><b>4 · Feed Nana 🍌</b><span style="color:var(--banana)">★ my pick</span></div>
+      <div class="phone" style="border-color:var(--banana);box-shadow:0 24px 60px rgba(255,210,63,.18),0 0 0 1px var(--banana)">
+        <div class="sb"><span>9:41</span><span>DAY 1/6 ▸ 🔥7</span></div>
+        <div class="scr">
+          <div class="mascot">
+            <div class="speech">89 kcal &amp; I'm stuffed! 😋</div>
+            <div class="buddy">🍌</div>
+            <div class="moodbar"><i style="width:94%"></i><b>3,011 / 3,200 kcal</b></div>
+            <div style="display:flex;justify-content:center;gap:8px;margin-top:8px">
+              <span class="pill" style="background:#2a2412;color:var(--power)">⚡ 114g prot</span>
+              <span class="pill" style="background:#3a1d12;color:var(--flame)">🔥 7-day</span>
+              <span class="pill" style="background:#10261a;color:var(--energy)">+250 XP</span>
+            </div>
+          </div>
+          <div class="h2">Feed Nana · 2 of 4</div>
+          <div class="feedrow">
+            <div class="feed fed"><div class="ic">🌅</div><div class="nm">S1 ✓</div></div>
+            <div class="feed fed"><div class="ic">☀️</div><div class="nm">Bread ✓</div></div>
+            <div class="feed"><div class="ic">🌤️</div><div class="nm">Yogurt</div></div>
+            <div class="feed"><div class="ic">🌙</div><div class="nm">S2 shake</div></div>
+          </div>
+          <div class="meal" style="margin-top:10px"><span class="ic">🌤️</span><span class="nm">Yogurt+walnuts+kiwi</span><span class="kc">497</span><span class="dot">+</span></div>
+          <div class="meal"><span class="ic">🌙</span><span class="nm">S2 Blueberry-Walnut</span><span class="kc">1003</span><span class="dot">+</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 ARCADE -->
+    <div class="col">
+      <div class="tag"><b>5 · Arcade Scoreboard</b><span>neon high-score energy</span></div>
+      <div class="phone">
+        <div class="sb arc"><span>9:41</span><span>● INSERT MEAL</span></div>
+        <div class="scr arc">
+          <div class="score">
+            <div class="lab">TODAY SCORE</div>
+            <div class="big">3,011</div>
+            <div class="hi">HI 3,200 · ▰▰▰▰▰▰▰▰▰▱ 94%</div>
+          </div>
+          <div class="combo"><span>⚡ PROTEIN COMBO</span><b>×114</b></div>
+          <div class="h2" style="color:var(--energy)">► MEAL SELECT · 2/4</div>
+          <div class="row"><span class="ic">🌅</span><span class="nm">S1 Peanut-Banana</span><span class="pts">1016 ✓</span></div>
+          <div class="row"><span class="ic">☀️</span><span class="nm">Avocado-cheese bread</span><span class="pts">495 ✓</span></div>
+          <div class="row"><span class="ic" style="opacity:.5">🌤️</span><span class="nm" style="color:var(--mut)">Yogurt+walnuts+kiwi</span><span class="pts" style="color:var(--mut)">+497</span></div>
+          <div class="row" style="border:0"><span class="ic" style="opacity:.5">🌙</span><span class="nm" style="color:var(--mut)">S2 Blueberry-Walnut</span><span class="pts" style="color:var(--mut)">+1003</span></div>
+          <div class="pellets">💧🟡🟡🟡⚪⚪ <span style="font-family:var(--sans);font-size:11px;color:var(--mut);align-self:center">water 1/2L</span></div>
+          <div style="text-align:center;color:var(--flame);font-size:12px;margin-top:10px">🔥 STREAK ×7 — DON'T BREAK IT</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

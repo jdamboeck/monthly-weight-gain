@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Supply Run · Nana — Gain Quest</title>
+<link rel="stylesheet" href="../design-system.css">
+</head>
+<body>
+<div class="app">
+  <header class="hud">
+    <div class="hud__brand"><span class="mk">🍌</span><span class="nm">Nana<small>Gain Quest</small></span></div>
+    <div class="hud__stats">
+      <span class="hud-chip hud-chip--lvl">LVL <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--streak">🔥 <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--xp">✦ <span class="num">1,250</span></span>
+    </div>
+  </header>
+
+  <main class="screen">
+    <div class="print-only" style="margin-bottom:12px"><strong>Supply run — whole month</strong> · 29 Jun – 28 Jul 2026 · 30 days</div>
+
+    <div class="section-title">Supply run<span class="spacer">29 Jun – 28 Jul · 30 days</span></div>
+
+    <div class="range-controls no-print">
+      <div class="field-grid" style="margin-bottom:var(--s3)">
+        <div class="field"><label class="field__label" for="from">From</label><input class="input" id="from" type="date" value="2026-06-29"></div>
+        <div class="field"><label class="field__label" for="to">To</label><input class="input" id="to" type="date" value="2026-07-28"></div>
+      </div>
+      <div class="btn-row" style="margin-bottom:var(--s3)">
+        <button class="btn btn--sm">Next 3 days</button>
+        <button class="btn btn--sm">This week</button>
+        <button class="btn btn--sm btn--primary">Whole month</button>
+      </div>
+      <div class="toggle" role="group" aria-label="Cost mode">
+        <button aria-pressed="true">By pack</button>
+        <button aria-pressed="false">Exact</button>
+      </div>
+    </div>
+
+    <!-- FRESH -->
+    <div class="loot-head loot-head--fresh" style="margin-top:var(--s4)">
+      <span class="ic">🛒</span>
+      <div><div class="nm">Fresh haul</div><div class="sub">10 runs · every 3 days</div></div>
+      <span class="price">€134.25</span>
+    </div>
+    <div class="loot-list">
+      <div class="loot"><div class="loot__body"><div class="loot__name">Whole milk 3.5%</div><div class="loot__need">28,000 ml needed</div></div><span class="loot__pack">28 × 1 L</span><span class="loot__price">30.80</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Greek yogurt 10%</div><div class="loot__need">5,000 g needed</div></div><span class="loot__pack">10 × 500 g</span><span class="loot__price">17.90</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Gouda/Emmentaler</div><div class="loot__need">1,100 g needed</div></div><span class="loot__pack">8 × 150 g</span><span class="loot__price">10.24</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Avocado</div><div class="loot__need">15 needed</div></div><span class="loot__pack">15 ea</span><span class="loot__price">10.50</span></div>
+      <div class="loot is-checked"><div class="loot__body"><div class="loot__name">Banana</div><div class="loot__need">40 needed</div></div><span class="loot__pack">40 ea</span><span class="loot__price">8.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Canned tuna</div><div class="loot__need">10 cans needed</div></div><span class="loot__pack">10</span><span class="loot__price">9.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Kidney beans</div><div class="loot__need">10 cans needed</div></div><span class="loot__pack">10</span><span class="loot__price">9.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Cherry tomatoes</div><div class="loot__need">1,000 g needed</div></div><span class="loot__pack">4 × 250 g</span><span class="loot__price">6.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Orange</div><div class="loot__need">20 needed</div></div><span class="loot__pack">20 ea</span><span class="loot__price">6.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Red pepper</div><div class="loot__need">10 needed</div></div><span class="loot__pack">10 ea</span><span class="loot__price">6.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Wholegrain bread</div><div class="loot__need">60 slices needed</div></div><span class="loot__pack">3 loaves</span><span class="loot__price">4.20</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Kiwi</div><div class="loot__need">10 needed</div></div><span class="loot__pack">10 ea</span><span class="loot__price">3.00</span></div>
+    </div>
+
+    <!-- PANTRY -->
+    <div class="loot-head loot-head--pantry" style="margin-top:var(--s4)">
+      <span class="ic">🫙</span>
+      <div><div class="nm">Pantry stock-up</div><div class="sub">2 bulk hauls · cycle 1 + cycle 5</div></div>
+      <span class="price">€73.15</span>
+    </div>
+    <div class="loot-list">
+      <div class="loot"><div class="loot__body"><div class="loot__name">Honey</div><div class="loot__need">80 tbsp needed</div></div><span class="loot__pack">4 × 500 g</span><span class="loot__price">14.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Frozen blueberries</div><div class="loot__need">2,000 g needed</div></div><span class="loot__pack">2 × 1 kg</span><span class="loot__price">13.96</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Walnuts</div><div class="loot__need">700 g needed</div></div><span class="loot__pack">1 × 700 g</span><span class="loot__price">9.80</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Peanut butter</div><div class="loot__need">1,900 g needed</div></div><span class="loot__pack">2 × 1 kg</span><span class="loot__price">9.50</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Oats</div><div class="loot__need">4,100 g needed</div></div><span class="loot__pack">9 × 500 g</span><span class="loot__price">7.29</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Frozen mixed berries</div><div class="loot__need">1,000 g needed</div></div><span class="loot__pack">1 × 1 kg</span><span class="loot__price">5.60</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Almonds</div><div class="loot__need">400 g needed</div></div><span class="loot__pack">1 × 400 g</span><span class="loot__price">5.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Olive oil (extra)</div><div class="loot__need">10 tbsp needed</div></div><span class="loot__pack">1 × 750 ml</span><span class="loot__price">5.00</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Ground flaxseed</div><div class="loot__need">30 tbsp needed</div></div><span class="loot__pack">1 × 500 g</span><span class="loot__price">1.50</span></div>
+      <div class="loot"><div class="loot__body"><div class="loot__name">Cocoa powder</div><div class="loot__need">10 tbsp needed</div></div><span class="loot__pack">1 × 250 g</span><span class="loot__price">1.50</span></div>
+    </div>
+
+    <!-- WATER -->
+    <div class="loot-head loot-head--water" style="margin-top:var(--s4)">
+      <span class="ic">💧</span>
+      <div><div class="nm">Water</div><div class="sub">2 L/day × 30 @ €0.66/L</div></div>
+      <span class="price">€39.60</span>
+    </div>
+    <div class="loot-list">
+      <div class="loot"><div class="loot__body"><div class="loot__name">Drinking water</div><div class="loot__need">60 L needed</div></div><span class="loot__pack">@ €0.66/L</span><span class="loot__price">39.60</span></div>
+    </div>
+
+    <!-- TREASURY -->
+    <div class="treasury" style="margin-top:var(--s4)">
+      <div class="treasury__row">Fresh €134.25 · Pantry €73.15 · Water €39.60</div>
+      <hr class="divider">
+      <div class="treasury__grand"><span style="font-weight:800">Grand total</span><b class="spacer" style="margin-left:auto">€247</b></div>
+      <div class="row" style="margin-top:var(--s2)"><span class="hint">vs €270 budget cap</span><span class="pill pill--energy spacer">🏆 €23 buffer</span></div>
+    </div>
+
+    <div class="btn-row no-print" style="margin-top:var(--s4)">
+      <button class="btn btn--primary" style="flex:1">📋 Copy list</button>
+      <button class="btn" style="flex:1" onclick="window.print()">🖨 Print</button>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="Screens">
+    <div class="tabbar__inner">
+      <a class="tab" href="today.html"><span class="ic">🍌</span>Today</a>
+      <a class="tab" href="rotation.html"><span class="ic">🗺️</span>Journey</a>
+      <a class="tab" href="recipes.html"><span class="ic">🃏</span>Cards</a>
+      <a class="tab" aria-current="page" href="shopping.html"><span class="ic">🎒</span>Supply</a>
+      <a class="tab" href="tracker.html"><span class="ic">🏁</span>Quest</a>
+      <a class="tab" href="settings.html"><span class="ic">⚙️</span>Setup</a>
+    </div>
+  </nav>
+</div>
+</body>
+</html>

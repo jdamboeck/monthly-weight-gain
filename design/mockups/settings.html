@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Setup · Nana — Gain Quest</title>
+<link rel="stylesheet" href="../design-system.css">
+</head>
+<body>
+<div class="app">
+  <header class="hud">
+    <div class="hud__brand"><span class="mk">🍌</span><span class="nm">Nana<small>Gain Quest</small></span></div>
+    <div class="hud__stats">
+      <span class="hud-chip hud-chip--lvl">LVL <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--streak">🔥 <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--xp">✦ <span class="num">1,250</span></span>
+    </div>
+  </header>
+
+  <main class="screen">
+    <div class="section-title">Plan setup</div>
+    <div class="panel"><div class="panel__pad">
+      <div class="field-grid">
+        <div class="field field--wide">
+          <label class="field__label" for="start">Start date <span class="field__hint">· anchors Day 1</span></label>
+          <input class="input" id="start" type="date" value="2026-06-29">
+        </div>
+        <div class="field"><label class="field__label" for="days">Plan days</label><input class="input num" id="days" value="30" inputmode="numeric"></div>
+        <div class="field"><label class="field__label" for="water">Water L/day</label><input class="input num" id="water" value="2" inputmode="decimal"></div>
+        <div class="field"><label class="field__label" for="waterp">Water €/L</label><input class="input num" id="waterp" value="0.66" inputmode="decimal"></div>
+        <div class="field"><label class="field__label" for="cap">Budget cap €</label><input class="input num" id="cap" value="270" inputmode="numeric"></div>
+      </div>
+    </div></div>
+
+    <div class="section-title">Win conditions</div>
+    <div class="panel"><div class="panel__pad">
+      <div class="field-grid">
+        <div class="field"><label class="field__label" for="kmin">🔥 kcal min</label><input class="input num" id="kmin" value="3000" inputmode="numeric"></div>
+        <div class="field"><label class="field__label" for="kmax">🔥 kcal max</label><input class="input num" id="kmax" value="3200" inputmode="numeric"></div>
+        <div class="field field--wide"><label class="field__label" for="prot">⚡ Protein min · g/day</label><input class="input num" id="prot" value="110" inputmode="numeric"></div>
+      </div>
+      <div class="pills" style="justify-content:flex-start;margin-top:var(--s4)">
+        <span class="pill pill--energy">🔥 3,000–3,200 kcal</span>
+        <span class="pill pill--power">⚡ ≥ 110 g</span>
+        <span class="pill pill--ghost">💶 ≤ €270</span>
+      </div>
+    </div></div>
+
+    <div class="section-title">Save file</div>
+    <div class="panel"><div class="panel__pad">
+      <div class="btn-row"><button class="btn btn--primary">⤓ Export JSON</button><button class="btn">⤒ Import JSON</button></div>
+      <hr class="divider">
+      <button class="btn btn--danger btn--block">↺ Reset to seed plan</button>
+      <p class="field__hint" style="margin-top:8px">Replaces all fuel cards, prices &amp; checked meals with the starter plan. Can't be undone.</p>
+    </div></div>
+
+    <div class="section-title">How the game works</div>
+    <div class="info">
+      <h3>Small appetite, calorie-dense by design</h3>
+      <ul>
+        <li>Two shakes carry most of the day's fuel — easy to drink when appetite is low.</li>
+        <li>Two solid snacks add ⚡ protein &amp; variety midday and afternoon.</li>
+        <li>A 6-day journey repeats 5× so the supply run stays predictable and cheap.</li>
+        <li>Every day clears 3,000–3,200 kcal · ≥110 g protein on a German-discounter budget.</li>
+      </ul>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="Screens">
+    <div class="tabbar__inner">
+      <a class="tab" href="today.html"><span class="ic">🍌</span>Today</a>
+      <a class="tab" href="rotation.html"><span class="ic">🗺️</span>Journey</a>
+      <a class="tab" href="recipes.html"><span class="ic">🃏</span>Cards</a>
+      <a class="tab" href="shopping.html"><span class="ic">🎒</span>Supply</a>
+      <a class="tab" href="tracker.html"><span class="ic">🏁</span>Quest</a>
+      <a class="tab" aria-current="page" href="settings.html"><span class="ic">⚙️</span>Setup</a>
+    </div>
+  </nav>
+</div>
+</body>
+</html>

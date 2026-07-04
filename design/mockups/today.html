@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Today · Nana — Gain Quest</title>
+<link rel="stylesheet" href="../design-system.css">
+</head>
+<body>
+<div class="app">
+  <header class="hud">
+    <div class="hud__brand">
+      <span class="mk">🍌</span>
+      <span class="nm">Nana<small>Gain Quest</small></span>
+    </div>
+    <div class="hud__stats">
+      <span class="hud-chip hud-chip--lvl">LVL <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--streak">🔥 <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--xp">✦ <span class="num">1,250</span></span>
+    </div>
+  </header>
+
+  <main class="screen">
+    <div class="section-title">Day 1 of 6 · Mon 29 Jun<span class="spacer">cycle 1 / 10</span></div>
+
+    <!-- MASCOT HERO -->
+    <section class="mascot">
+      <div class="mascot__speech">Just 89 kcal &amp; I'm stuffed! 😋</div>
+      <div class="mascot__buddy">🍌</div>
+      <div class="fuelbar">
+        <div class="fuelbar__fill" style="width:94%"></div>
+        <div class="fuelbar__target" style="left:93.75%"></div>
+        <div class="fuelbar__label">3,011 / 3,200 kcal</div>
+      </div>
+      <div class="pills">
+        <span class="pill pill--power">⚡ <span class="num">114</span> g protein</span>
+        <span class="pill pill--flame">🔥 7-day streak</span>
+        <span class="pill pill--player">✦ +250 XP today</span>
+      </div>
+    </section>
+
+    <!-- MINI GAUGES -->
+    <div class="tiles">
+      <div class="tile tile--energy">
+        <div class="tile__label">🔥 Fuel</div>
+        <div class="tile__value">94<span class="u">%</span></div>
+      </div>
+      <div class="tile tile--power">
+        <div class="tile__label">⚡ Power</div>
+        <div class="tile__value">104<span class="u">%</span></div>
+      </div>
+      <div class="tile">
+        <div class="tile__label">💶 Cost</div>
+        <div class="tile__value">6.14<span class="u">€</span></div>
+      </div>
+    </div>
+
+    <!-- FEED GRID -->
+    <div class="section-title">Feed Nana<span class="spacer">2 of 4 done</span></div>
+    <div class="feedgrid">
+      <div class="feedslot is-fed"><span class="ic">🌅</span><span class="nm">S1</span></div>
+      <div class="feedslot is-fed"><span class="ic">☀️</span><span class="nm">Bread</span></div>
+      <div class="feedslot"><span class="ic">🌤️</span><span class="nm">Yogurt</span></div>
+      <div class="feedslot"><span class="ic">🌙</span><span class="nm">S2</span></div>
+    </div>
+
+    <!-- MEAL CARDS -->
+    <div class="section-title">Today's meals</div>
+
+    <div class="feed-card is-done">
+      <div class="feed-card__slot"><span class="feed-card__icon">🌅</span><span class="feed-card__time">Morn</span></div>
+      <div class="feed-card__body">
+        <div class="feed-card__name">S1 — Peanut-Banana shake</div>
+        <div class="feed-card__macros"><span><b>1,016</b> kcal</span><span><b>38</b> g</span><span>€<b>1.21</b></span></div>
+        <div class="feed-card__ings">Milk 500 ml · oats 80 g · banana · PB 30 g · honey · flax</div>
+      </div>
+      <input class="feedbtn" type="checkbox" checked aria-label="Feed S1">
+    </div>
+
+    <div class="feed-card is-done">
+      <div class="feed-card__slot"><span class="feed-card__icon">☀️</span><span class="feed-card__time">Mid</span></div>
+      <div class="feed-card__body">
+        <div class="feed-card__name">Avocado-cheese bread</div>
+        <div class="feed-card__macros"><span><b>495</b> kcal</span><span><b>23</b> g</span><span>€<b>1.52</b></span></div>
+        <div class="feed-card__ings">Wholegrain bread 2 sl · avocado ½ · Gouda 50 g · red pepper</div>
+      </div>
+      <input class="feedbtn" type="checkbox" checked aria-label="Feed midday">
+    </div>
+
+    <div class="feed-card">
+      <div class="feed-card__slot"><span class="feed-card__icon">🌤️</span><span class="feed-card__time">Aft</span></div>
+      <div class="feed-card__body">
+        <div class="feed-card__name">Yogurt, walnuts &amp; kiwi</div>
+        <div class="feed-card__macros"><span><b>497</b> kcal</span><span><b>15</b> g</span><span>€<b>1.44</b></span></div>
+        <div class="feed-card__ings">Greek yogurt 200 g · honey · walnuts 20 g · kiwi</div>
+      </div>
+      <input class="feedbtn" type="checkbox" aria-label="Feed afternoon">
+    </div>
+
+    <div class="feed-card">
+      <div class="feed-card__slot"><span class="feed-card__icon">🌙</span><span class="feed-card__time">Eve</span></div>
+      <div class="feed-card__body">
+        <div class="feed-card__name">S2 — Blueberry-Walnut shake</div>
+        <div class="feed-card__macros"><span><b>1,003</b> kcal</span><span><b>37</b> g</span><span>€<b>1.98</b></span></div>
+        <div class="feed-card__ings">Milk 500 ml · oats 60 g · blueberries 100 g · PB 30 g · walnuts 25 g</div>
+      </div>
+      <input class="feedbtn" type="checkbox" aria-label="Feed S2">
+    </div>
+
+    <!-- BOSS / WATER -->
+    <section class="streak">
+      <span class="streak__flame">🏆</span>
+      <div class="streak__body"><b>Daily boss: 89 kcal to go</b><span>Feed all 4 → close the day &amp; bank +100 XP</span></div>
+    </section>
+
+    <div class="panel" style="margin-top:var(--s3)">
+      <div class="panel__pad row" style="flex-wrap:wrap;gap:var(--s3)">
+        <span style="font-size:22px">💧</span>
+        <div style="flex:1 1 100px"><div style="font-weight:800">Water · 2 L quest</div><span class="hint">1.0 L logged · €1.32</span></div>
+        <div class="toggle" role="group" aria-label="Water">
+          <button aria-pressed="true">.5</button><button aria-pressed="true">1.0</button><button aria-pressed="false">1.5</button><button aria-pressed="false">2.0</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="Screens">
+    <div class="tabbar__inner">
+      <a class="tab" aria-current="page" href="today.html"><span class="ic">🍌</span>Today</a>
+      <a class="tab" href="rotation.html"><span class="ic">🗺️</span>Journey</a>
+      <a class="tab" href="recipes.html"><span class="ic">🃏</span>Cards</a>
+      <a class="tab" href="shopping.html"><span class="ic">🎒</span>Supply</a>
+      <a class="tab" href="tracker.html"><span class="ic">🏁</span>Quest</a>
+      <a class="tab" href="settings.html"><span class="ic">⚙️</span>Setup</a>
+    </div>
+  </nav>
+</div>
+</body>
+</html>

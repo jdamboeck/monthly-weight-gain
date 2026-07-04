@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Quest · Nana — Gain Quest</title>
+<link rel="stylesheet" href="../design-system.css">
+</head>
+<body>
+<div class="app">
+  <header class="hud">
+    <div class="hud__brand"><span class="mk">🍌</span><span class="nm">Nana<small>Gain Quest</small></span></div>
+    <div class="hud__stats">
+      <span class="hud-chip hud-chip--lvl">LVL <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--streak">🔥 <span class="num">7</span></span>
+      <span class="hud-chip hud-chip--xp">✦ <span class="num">1,250</span></span>
+    </div>
+  </header>
+
+  <main class="screen">
+    <!-- progress hero -->
+    <section class="mascot">
+      <div class="mascot__speech">2 cycles down — 8 to go! 💪</div>
+      <div class="mascot__buddy">🏁</div>
+      <div class="fuelbar">
+        <div class="fuelbar__fill" style="width:20%"></div>
+        <div class="fuelbar__label">6 / 30 days complete</div>
+      </div>
+      <div class="pills">
+        <span class="pill pill--player">✦ Level 7</span>
+        <span class="pill pill--flame">🔥 7-day streak</span>
+        <span class="pill pill--energy">🏆 2 boss wins</span>
+      </div>
+    </section>
+
+    <div class="section-title">Quest map · 10 cycles<span class="spacer">3 days each</span></div>
+    <div class="panel"><div class="panel__pad">
+      <div class="qpath">
+        <div class="qstop is-done"><div class="qstop__rail"><div class="qstop__node">1</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 1 · days 1–3</div><span class="qstop__tag">🫙 full pantry stock-up</span></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" checked aria-label="Cycle 1 done"></div></div></div>
+
+        <div class="qstop is-done"><div class="qstop__rail"><div class="qstop__node">2</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 2 · days 4–6</div><div class="qstop__sub">🛒 fresh run</div></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" checked aria-label="Cycle 2 done"></div></div></div>
+
+        <div class="qstop"><div class="qstop__rail"><div class="qstop__node">3</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 3 · days 7–9</div><div class="qstop__sub">🛒 fresh run</div></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" aria-label="Cycle 3 done"></div></div></div>
+
+        <div class="qstop"><div class="qstop__rail"><div class="qstop__node">4</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 4 · days 10–12</div><div class="qstop__sub">🛒 fresh run</div></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" aria-label="Cycle 4 done"></div></div></div>
+
+        <div class="qstop"><div class="qstop__rail"><div class="qstop__node">5</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 5 · days 13–15</div><span class="qstop__tag">🫙 pantry top-up</span></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" aria-label="Cycle 5 done"></div></div></div>
+
+        <div class="qstop"><div class="qstop__rail"><div class="qstop__node">6</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 6 · days 16–18</div><div class="qstop__sub">🛒 fresh run</div></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" aria-label="Cycle 6 done"></div></div></div>
+
+        <div class="qstop"><div class="qstop__rail"><div class="qstop__node">7</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 7 · days 19–21</div><div class="qstop__sub">🛒 fresh run</div></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" aria-label="Cycle 7 done"></div></div></div>
+
+        <div class="qstop"><div class="qstop__rail"><div class="qstop__node">8</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 8 · days 22–24</div><div class="qstop__sub">🛒 fresh run</div></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" aria-label="Cycle 8 done"></div></div></div>
+
+        <div class="qstop"><div class="qstop__rail"><div class="qstop__node">9</div><div class="qstop__line"></div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 9 · days 25–27</div><div class="qstop__sub">🛒 fresh run</div></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" aria-label="Cycle 9 done"></div></div></div>
+
+        <div class="qstop"><div class="qstop__rail"><div class="qstop__node">🏆</div></div>
+          <div class="qstop__body"><div class="row"><div style="flex:1"><div class="qstop__title">Cycle 10 · days 28–30</div><span class="qstop__tag" style="background:var(--flame-fill);color:var(--flame);border-color:color-mix(in srgb,var(--flame) 35%,transparent)">🏆 final boss</span></div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" aria-label="Cycle 10 done"></div></div></div>
+      </div>
+    </div></div>
+
+    <div class="section-title">Treasury</div>
+    <div class="treasury">
+      <div class="treasury__row">🛒 Fresh €134.25 · 🫙 Pantry €73.15 · 💧 Water €39.60</div>
+      <hr class="divider">
+      <div class="treasury__grand"><span style="font-weight:800">Spent plan</span><b class="spacer" style="margin-left:auto">€247</b></div>
+      <div class="row" style="margin-top:var(--s2)"><span class="hint">budget cap €270</span><span class="pill pill--energy spacer">🏆 €23 buffer left</span></div>
+    </div>
+  </main>
+
+  <nav class="tabbar" aria-label="Screens">
+    <div class="tabbar__inner">
+      <a class="tab" href="today.html"><span class="ic">🍌</span>Today</a>
+      <a class="tab" href="rotation.html"><span class="ic">🗺️</span>Journey</a>
+      <a class="tab" href="recipes.html"><span class="ic">🃏</span>Cards</a>
+      <a class="tab" href="shopping.html"><span class="ic">🎒</span>Supply</a>
+      <a class="tab" aria-current="page" href="tracker.html"><span class="ic">🏁</span>Quest</a>
+      <a class="tab" href="settings.html"><span class="ic">⚙️</span>Setup</a>
+    </div>
+  </nav>
+</div>
+</body>
+</html>
