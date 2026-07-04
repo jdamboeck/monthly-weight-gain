@@ -225,7 +225,13 @@ select.input{-webkit-appearance:none;appearance:none;padding-right:32px;backgrou
 .ing-row .input.num{text-align:right}
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3) var(--s4)}
 .field-grid .field--wide{grid-column:1/-1}
-.cell-input{width:56px;max-width:100%;text-align:right;border:1px solid var(--line-2);border-radius:9px;background:var(--panel-2);color:inherit;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:var(--t-xs);padding:6px 5px;min-height:34px}
+.cell-input{width:50px;max-width:100%;text-align:right;border:1px solid var(--line-2);border-radius:9px;background:var(--panel-2);color:inherit;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:var(--t-xs);padding:6px 4px;min-height:34px}
+.cell-name{width:100%;text-align:left;font-family:var(--sans);font-weight:700;font-size:var(--t-xs);padding-left:4px;padding-right:2px}
+.grouptog{width:34px;height:32px;border:1px solid var(--line-2);border-radius:9px;background:var(--panel-2);font-size:15px;line-height:1;padding:0}
+.grouptog:hover{border-color:var(--player)}
+.fuelcard__nameinput{width:100%;border:1px solid transparent;border-radius:9px;background:transparent;color:var(--ink);font-family:var(--sans);font-size:var(--t-lg);font-weight:900;letter-spacing:-.01em;padding:3px 6px;margin:-3px -6px}
+.fuelcard__nameinput:hover{border-color:var(--line-2);background:var(--panel-2)}
+.fuelcard__nameinput:focus{outline:none;border-color:var(--player);background:var(--panel);box-shadow:0 0 0 3px var(--player-fill)}
 .cell-input:hover{border-color:var(--player);background:var(--panel-3)}
 .cell-input:focus{outline:none;border-color:var(--player);background:var(--panel);box-shadow:0 0 0 3px var(--player-fill)}
 .codex{width:100%;border-collapse:collapse;font-size:var(--t-xs);table-layout:fixed}
@@ -235,8 +241,8 @@ select.input{-webkit-appearance:none;appearance:none;padding-right:32px;backgrou
 .codex td:first-child{text-align:left;font-weight:700;padding-left:2px;font-size:var(--t-xs);line-height:1.25}
 .codex td.u{color:var(--faint);font-size:10px}
 .codex th:first-child,.codex td:first-child{width:auto}
-.codex th:nth-child(2),.codex td:nth-child(2){width:30px}
-.codex th:last-child,.codex td:last-child{width:44px}
+.codex th:nth-child(2),.codex td:nth-child(2){width:38px;text-align:center}
+.codex th:last-child,.codex td:last-child{width:34px;text-align:center}
 .codex tr:last-child td{border-bottom:0}
 .loot-head{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);border-radius:var(--radius) var(--radius) 0 0;border:1px solid var(--line);border-bottom:0}
 .loot-head .ic{font-size:22px}
@@ -430,6 +436,8 @@ function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;"
 
 /* ---- COMPUTE: nutrition & cost ------------------------------------------- */
 function ing(key){ return state.ingredients[key]; }
+const MISSING_RECIPE={ name:"(empty slot)", kind:"shake", emoji:"⬚", items:[] };
+function recipeOr(rk){ return state.recipes[rk]||MISSING_RECIPE; }
 function recipeStats(rk){
   const r = state.recipes[rk];
   let kcal=0, protein=0, cost=0;
@@ -590,12 +598,12 @@ function viewToday(){
     : (fed===4?`Day complete! I'm stuffed 😋`:`Feeling good — keep feeding! 💪`);
 
   const feedgrid = SLOTS.map(s=>{
-    const r=state.recipes[day[s]];
+    const r=recipeOr(day[s]);
     return `<div class="feedslot ${isFed(iso,s)?'is-fed':''}"><span class="ic">${SLOT_META[s].icon}</span><span class="nm">${esc(shortLabel(r))}</span></div>`;
   }).join("");
 
   const cards = SLOTS.map(s=>{
-    const rk=day[s]; const r=state.recipes[rk]; const st=recipeStats(rk);
+    const rk=day[s]; const r=recipeOr(rk); const st=recipeStats(rk);
     return `<div class="feed-card ${isFed(iso,s)?'is-done':''}">
       <div class="feed-card__slot"><span class="feed-card__icon">${SLOT_META[s].icon}</span><span class="feed-card__time">${SLOT_META[s].time}</span></div>
       <div class="feed-card__body">
@@ -660,7 +668,7 @@ function shortLabel(r){
 function viewRotation(){
   const curDay=rotationDayFor(todayISO());
   const stops=state.rotation.map((day,i)=>{
-    const meals=SLOTS.map(s=>`<b>${esc(state.recipes[day[s]].name)}</b>`).join(" · ");
+    const meals=SLOTS.map(s=>`<b>${esc(recipeOr(day[s]).name)}</b>`).join(" · ");
     let kcal=0,protein=0,cost=0;
     for(const s of SLOTS){ const st=recipeStats(day[s]); kcal+=st.kcal;protein+=st.protein;cost+=st.cost; }
     const cls=i===curDay?'is-current':(i<curDay?'is-done':'');
@@ -702,7 +710,8 @@ function viewRecipes(){
     return `<section class="fuelcard">
       <div class="fuelcard__top">
         <span class="fuelcard__emoji">${r.emoji||"🍽️"}</span>
-        <div><div class="fuelcard__id">${rk} · ${r.kind.toUpperCase()}</div><div class="fuelcard__name">${esc(r.name)}</div></div>
+        <div style="flex:1;min-width:0"><div class="fuelcard__id">${rk} · ${r.kind.toUpperCase()}</div>
+          <input class="fuelcard__nameinput" value="${esc(r.name)}" aria-label="Recipe name" data-recipe="${rk}" data-field="rename"></div>
         <span class="fuelcard__rarity pill ${rar.cls}">${rar.s}</span>
       </div>
       <div class="fuelcard__body">${rows}
@@ -712,6 +721,7 @@ function viewRecipes(){
         <span class="pill pill--energy">🔥 <span class="num">${fmtNum(st.kcal)}</span> kcal</span>
         <span class="pill pill--power">⚡ <span class="num">${Math.round(st.protein)}</span>g</span>
         <span class="total">${fmtEUR(st.cost)}</span>
+        <button class="ing-remove" title="Delete recipe" aria-label="Delete recipe" data-recipe="${rk}" data-field="delRecipe" style="margin-left:8px">🗑</button>
       </div>
     </section>`;
   }).join("");
@@ -719,25 +729,27 @@ function viewRecipes(){
   const codexRows=Object.keys(state.ingredients).map(k=>{
     const g=state.ingredients[k]; const perUnit=g.packPrice/g.pack;
     return `<tr>
-      <td>${esc(g.name)}</td>
-      <td class="u">${esc(g.unit)}</td>
+      <td><input class="cell-input cell-name" value="${esc(g.name)}" data-ing="${k}" data-field="name" aria-label="Ingredient name"></td>
+      <td class="u"><button class="grouptog" data-ing="${k}" data-field="group" title="fresh / pantry" aria-label="group">${g.group==="fresh"?"🛒":"🫙"}</button></td>
       <td><input class="cell-input" value="${g.kcalPer}" inputmode="decimal" data-ing="${k}" data-field="kcalPer" aria-label="kcal per unit"></td>
       <td><input class="cell-input" value="${g.proteinPer}" inputmode="decimal" data-ing="${k}" data-field="proteinPer" aria-label="protein per unit"></td>
       <td><input class="cell-input" value="${g.pack}" inputmode="decimal" data-ing="${k}" data-field="pack" aria-label="pack size"></td>
       <td><input class="cell-input" value="${g.packPrice}" inputmode="decimal" data-ing="${k}" data-field="packPrice" aria-label="pack price"></td>
-      <td class="u">${fmtEUR(perUnit)}</td>
+      <td class="u"><button class="ing-remove" title="Delete ingredient" aria-label="Delete ingredient" data-ing="${k}" data-field="delIng">✕</button></td>
     </tr>`;
   }).join("");
 
   return screen("recipes",
     `<div class="section-title">Fuel cards · editable<span class="spacer">${Object.keys(state.recipes).length} collected</span></div>
      ${cards}
+     <button class="btn btn--primary btn--block" id="newRecipe" style="margin-top:var(--s2)">＋ New fuel card</button>
      <div class="section-title">Ingredient codex<span class="spacer">✎ tap a value to edit</span></div>
      <div class="panel"><div class="panel__pad">
        <table class="codex">
-         <thead><tr><th>Item</th><th>Unit</th><th>✎ kcal/u</th><th>✎ prot/u</th><th>✎ Pack</th><th>✎ Pack €</th><th>€/u</th></tr></thead>
+         <thead><tr><th>✎ Item</th><th>Grp</th><th>✎ kcal/u</th><th>✎ prot/u</th><th>✎ Pack</th><th>✎ Pack €</th><th>del</th></tr></thead>
          <tbody>${codexRows}</tbody>
        </table>
+       <button class="ing-add" id="newIngredient" style="margin-top:var(--s3)">＋ new ingredient</button>
      </div></div>
      <div class="info" style="margin-top:var(--s3)"><h3>Everything recomputes live</h3><ul><li>Boxed values (✎) are editable — change a price or kcal and the card totals, today's fuel bar, the supply run and treasury all update instantly.</li></ul></div>`
   );
@@ -752,7 +764,7 @@ function viewShopping(){
   const freshTotal=list.fresh.reduce((a,l)=>a+l.cost,0);
   const pantryTotal=list.pantry.reduce((a,l)=>a+l.cost,0);
 
-  const lootRows=lines=>lines.map(l=>`<div class="loot">
+  const lootRows=lines=>lines.map(l=>`<div class="loot" data-loot="${esc(l.key)}" role="button" tabindex="0" title="tap to check off">
     <div class="loot__body"><div class="loot__name">${esc(l.name)}</div><div class="loot__need">${fmtNum(l.total)} ${esc(l.unit)} needed</div></div>
     <span class="loot__pack">${esc(l.packStr)}</span><span class="loot__price">${l.cost.toFixed(2)}</span></div>`).join("");
 
@@ -927,10 +939,44 @@ function wire(route){
       const {recipe}=e.target.dataset; const firstIng=Object.keys(state.ingredients)[0];
       setState(s=>{ s.recipes[recipe].items.push([firstIng,1]); });
     }));
-    app.querySelectorAll(".cell-input").forEach(el=>el.addEventListener("change",e=>{
+    app.querySelectorAll("[data-field='rename']").forEach(el=>el.addEventListener("change",e=>{
+      const {recipe}=e.target.dataset; const v=e.target.value.trim()||state.recipes[recipe].name;
+      setState(s=>{ s.recipes[recipe].name=v; });
+    }));
+    app.querySelectorAll("[data-field='delRecipe']").forEach(el=>el.addEventListener("click",e=>{
+      const {recipe}=e.target.dataset;
+      const used=state.rotation.some(d=>SLOTS.some(sl=>d[sl]===recipe));
+      const msg=used?`"${state.recipes[recipe].name}" is used in the rotation — delete it anyway? Those slots will show as empty until reassigned.`:`Delete "${state.recipes[recipe].name}"?`;
+      if(confirm(msg)) setState(s=>{ delete s.recipes[recipe]; });
+    }));
+    app.querySelector("#newRecipe")?.addEventListener("click",()=>{
+      const key="R"+Date.now().toString(36);
+      const firstIng=Object.keys(state.ingredients)[0];
+      setState(s=>{ s.recipes[key]={name:"New recipe",kind:"shake",emoji:"🍽️",items:[[firstIng,1]]}; });
+    });
+    // codex: numeric cells, name (string), group toggle, delete
+    app.querySelectorAll(".cell-input[data-field='name']").forEach(el=>el.addEventListener("change",e=>{
+      const {ing:k}=e.target.dataset; const v=e.target.value.trim()||state.ingredients[k].name;
+      setState(s=>{ s.ingredients[k].name=v; });
+    }));
+    app.querySelectorAll(".cell-input:not([data-field='name'])").forEach(el=>el.addEventListener("change",e=>{
       const {ing:k,field}=e.target.dataset;
       setState(s=>{ s.ingredients[k][field]=num(e.target.value,0); });
     }));
+    app.querySelectorAll("[data-field='group']").forEach(el=>el.addEventListener("click",e=>{
+      const {ing:k}=e.target.dataset;
+      setState(s=>{ s.ingredients[k].group = s.ingredients[k].group==="fresh"?"pantry":"fresh"; });
+    }));
+    app.querySelectorAll("[data-field='delIng']").forEach(el=>el.addEventListener("click",e=>{
+      const {ing:k}=e.target.dataset;
+      const usedBy=Object.values(state.recipes).filter(r=>r.items.some(([ik])=>ik===k)).map(r=>r.name);
+      if(usedBy.length){ alert(`Can't delete "${state.ingredients[k].name}" — still used by: ${usedBy.join(", ")}. Remove it from those recipes first.`); return; }
+      if(confirm(`Delete ingredient "${state.ingredients[k].name}"?`)) setState(s=>{ delete s.ingredients[k]; });
+    }));
+    app.querySelector("#newIngredient")?.addEventListener("click",()=>{
+      const key="i"+Date.now().toString(36);
+      setState(s=>{ s.ingredients[key]={name:"New ingredient",unit:"g",kcalPer:1,proteinPer:0,pricePer:0.001,pack:100,packPrice:1,packLabel:"100 g",group:"pantry"}; });
+    });
   }
 
   if(route==="shopping"){
@@ -951,6 +997,12 @@ function wire(route){
     if(cp) cp.addEventListener("click",()=>copyShopping());
     const pr=app.querySelector("#printList");
     if(pr) pr.addEventListener("click",()=>window.print());
+    // loot check-off: ephemeral, no re-render (survives until nav/edit)
+    app.querySelectorAll("[data-loot]").forEach(el=>{
+      const toggle=()=>el.classList.toggle("is-checked");
+      el.addEventListener("click",toggle);
+      el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } });
+    });
   }
 
   if(route==="tracker"){
