@@ -268,6 +268,20 @@ select.input{-webkit-appearance:none;appearance:none;padding-right:32px;backgrou
 .loot__price{font-family:var(--mono);font-weight:800;font-size:var(--t-sm);width:54px;text-align:right}
 .loot.is-checked{background:var(--panel-2)}
 .loot.is-checked .loot__name{color:var(--mut);text-decoration:line-through;text-decoration-color:var(--line-2)}
+.loot__bought{flex:0 0 auto;min-height:32px;padding:0 10px;border:1px solid color-mix(in srgb,var(--energy) 45%,var(--line-2));border-radius:10px;background:var(--energy-fill);color:var(--energy);font-size:var(--t-xs);font-weight:800}
+.loot__bought:hover{background:var(--energy);color:#06210a;border-color:var(--energy)}
+.stockbox{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:var(--s3) var(--s4);margin-top:var(--s3)}
+.stockbox>summary{font-weight:900;font-size:var(--t-md);cursor:pointer;display:flex;align-items:center;gap:8px;list-style:none}
+.stockbox>summary::-webkit-details-marker{display:none}
+.stockbox>summary:before{content:"▸";color:var(--mut);transition:transform .15s}
+.stockbox[open]>summary:before{transform:rotate(90deg)}
+.stockbox[open]>summary{margin-bottom:var(--s3)}
+.stock-grid{display:grid;grid-template-columns:1fr;gap:var(--s2)}
+@media (min-width:560px){.stock-grid{grid-template-columns:1fr 1fr}}
+.stock-row{display:flex;align-items:center;gap:var(--s2)}
+.stock-row__name{flex:1;min-width:0;font-size:var(--t-sm);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stock-input{width:74px;flex:0 0 74px;min-height:36px}
+.stock-row__u{flex:0 0 auto;font-size:var(--t-xs);color:var(--faint);width:34px}
 .treasury{background:linear-gradient(135deg,color-mix(in srgb,var(--energy) 14%,var(--panel)),var(--panel));border:1px solid color-mix(in srgb,var(--energy) 35%,var(--line));border-radius:var(--radius-lg);padding:var(--s4);box-shadow:var(--shadow)}
 .treasury__row{display:flex;align-items:baseline;gap:var(--s2);font-size:var(--t-sm);color:var(--mut)}
 .treasury__grand{display:flex;align-items:baseline;gap:var(--s2);margin-top:var(--s2)}
@@ -384,7 +398,7 @@ const XP_PER_MEAL = 25, XP_BOSS_BONUS = 100;
 
 /* ---- STORE --------------------------------------------------------------- */
 const LS_KEY = "mwg.v1";
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 function freshState(){
   return {
@@ -395,12 +409,14 @@ function freshState(){
     settings: structuredClone(SEED_SETTINGS),
     checks: { meals:{}, cycles:{}, pantry:{ start:false, mid:false } },
     water: {},
+    stock: {},
     game: { xp:0 },
   };
 }
 function migrate(s){
   if(!s || typeof s!=="object") return freshState();
   if(!s.water) s.water = {};
+  if(!s.stock) s.stock = {};
   if(!s.game) s.game = { xp:0 };
   if(!s.checks) s.checks = { meals:{}, cycles:{}, pantry:{ start:false, mid:false } };
   if(!s.checks.meals) s.checks.meals = {};
@@ -530,13 +546,17 @@ function accumulate(fromISO,toISO){
   }
   return { totals, days };
 }
+function stockOf(k){ return (state.stock&&state.stock[k])||0; }
 function lineFor(k,total,byPack){
   const g=ing(k);
-  const packs=Math.ceil(total/g.pack);
-  const cost = byPack ? packs*g.packPrice : total*g.pricePer;
-  const packStr = g.pack===1 ? packs+(g.unit==="each"?" ea":g.unit==="can"?"":" "+g.unit)
+  const stock=stockOf(k);
+  const toBuy=Math.max(0,total-stock);
+  const packs=Math.ceil(toBuy/g.pack);
+  const cost = byPack ? packs*g.packPrice : toBuy*g.pricePer;
+  const packStr = packs===0 ? "✓ in stock"
+                : g.pack===1 ? packs+(g.unit==="each"?" ea":g.unit==="can"?"":" "+g.unit)
                 : (g.name==="Wholegrain bread"? packs+(packs>1?" loaves":" loaf") : packs+" × "+g.packLabel);
-  return { key:k, name:g.name, total, unit:g.unit, packs, packLabel:g.packLabel, packStr, cost, group:g.group };
+  return { key:k, name:g.name, total, stock, toBuy, unit:g.unit, packs, packLabel:g.packLabel, packStr, cost, group:g.group };
 }
 function shoppingList(fromISO,toISO){
   const byPack=state.settings.shoppingByPack;
@@ -782,9 +802,25 @@ function viewShopping(){
   const freshTotal=list.fresh.reduce((a,l)=>a+l.cost,0);
   const pantryTotal=list.pantry.reduce((a,l)=>a+l.cost,0);
 
-  const lootRows=lines=>lines.map(l=>`<div class="loot" data-loot="${esc(l.key)}" role="button" tabindex="0" title="tap to check off">
-    <div class="loot__body"><div class="loot__name">${esc(l.name)}</div><div class="loot__need">${fmtNum(l.total)} ${esc(l.unit)} needed</div></div>
-    <span class="loot__pack">${esc(l.packStr)}</span><span class="loot__price">${l.cost.toFixed(2)}</span></div>`).join("");
+  const lootRows=lines=>lines.map(l=>{
+    const need=`${fmtNum(l.total)} ${esc(l.unit)} needed${l.stock>0?` · have ${fmtNum(l.stock)}`:''}`;
+    const boughtBtn=l.packs>0?`<button class="loot__bought" data-bought="${esc(l.key)}" title="Mark bought — adds ${l.packs} pack(s) to stock" aria-label="Mark ${esc(l.name)} bought">✓ got it</button>`:'';
+    return `<div class="loot ${l.packs===0?'is-checked':''}" data-loot="${esc(l.key)}">
+    <div class="loot__body"><div class="loot__name">${esc(l.name)}</div><div class="loot__need">${need}</div></div>
+    <span class="loot__pack">${esc(l.packStr)}</span><span class="loot__price">${l.cost.toFixed(2)}</span>${boughtBtn}</div>`;
+  }).join("");
+
+  // collapsible stock editor over all ingredients
+  const stockRows=Object.keys(state.ingredients).map(k=>{
+    const g=state.ingredients[k];
+    return `<div class="stock-row"><span class="stock-row__name">${esc(g.name)}</span>
+      <input class="input num stock-input" value="${stockOf(k)}" inputmode="decimal" data-stock="${k}" aria-label="${esc(g.name)} in stock"><span class="stock-row__u">${esc(g.unit)}</span></div>`;
+  }).join("");
+  const stockCount=Object.values(state.stock||{}).filter(v=>v>0).length;
+  const stockSection=`<details class="stockbox no-print"><summary>🏠 In stock<span class="spacer hint">${stockCount?stockCount+" item"+(stockCount>1?"s":""):"tap to add"}</span></summary>
+    <p class="hint" style="margin:0 0 var(--s2)">Enter what you already have — the list below only shows what's left to buy.</p>
+    <div class="stock-grid">${stockRows}</div>
+    <button class="btn btn--sm btn--ghost" id="clearStock" style="margin-top:var(--s2)">Clear all stock</button></details>`;
 
   return screen("shopping",
     `<div class="print-only" style="margin-bottom:12px"><strong>Supply run</strong> · ${fmtDate(shopFrom)} – ${fmtDate(shopTo)} · ${list.days} days</div>
@@ -807,7 +843,8 @@ function viewShopping(){
         <div class="btn-row"><button class="btn btn--sm" id="copyList">📋 Copy</button><button class="btn btn--sm" id="printList">🖨 Print</button></div>
       </div>
     </div>
-    <div class="loot-head loot-head--fresh" style="margin-top:var(--s4)"><span class="ic">🛒</span><div><div class="nm">Fresh haul</div><div class="sub">every 3 days</div></div><span class="price">${fmtEUR(freshTotal)}</span></div>
+    ${stockSection}
+    <div class="loot-head loot-head--fresh" style="margin-top:var(--s4)"><span class="ic">🛒</span><div><div class="nm">Fresh haul</div><div class="sub">every 3 days · to buy</div></div><span class="price">${fmtEUR(freshTotal)}</span></div>
     <div class="loot-list">${lootRows(list.fresh)||'<div class="loot"><div class="loot__body"><div class="loot__need">nothing</div></div></div>'}</div>
     <div class="loot-head loot-head--pantry"><span class="ic">🫙</span><div><div class="nm">Pantry stock</div><div class="sub">bulk restock</div></div><span class="price">${fmtEUR(pantryTotal)}</span></div>
     <div class="loot-list">${lootRows(list.pantry)||'<div class="loot"><div class="loot__body"><div class="loot__need">nothing</div></div></div>'}</div>
@@ -1031,11 +1068,24 @@ function wire(route){
     if(cp) cp.addEventListener("click",()=>copyShopping());
     const pr=app.querySelector("#printList");
     if(pr) pr.addEventListener("click",()=>window.print());
-    // loot check-off: ephemeral, no re-render (survives until nav/edit)
+    // loot check-off: ephemeral strike-through; ignore clicks on the "got it" button
     app.querySelectorAll("[data-loot]").forEach(el=>{
-      const toggle=()=>el.classList.toggle("is-checked");
-      el.addEventListener("click",toggle);
-      el.addEventListener("keydown",e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); toggle(); } });
+      el.addEventListener("click",e=>{ if(e.target.closest("[data-bought]")) return; el.classList.toggle("is-checked"); });
+    });
+    // "✓ got it" → add the bought packs (in units) to stock
+    app.querySelectorAll("[data-bought]").forEach(el=>el.addEventListener("click",e=>{
+      e.stopPropagation();
+      const k=e.target.dataset.bought; const g=ing(k);
+      const line=lineFor(k, accumulate(shopFrom,shopTo).totals[k]||0, state.settings.shoppingByPack);
+      setState(s=>{ s.stock[k]=(s.stock[k]||0)+line.packs*g.pack; });
+    }));
+    // stock inputs
+    app.querySelectorAll("[data-stock]").forEach(el=>el.addEventListener("change",e=>{
+      const k=e.target.dataset.stock; const v=num(e.target.value,0);
+      setState(s=>{ if(v<=0) delete s.stock[k]; else s.stock[k]=v; });
+    }));
+    app.querySelector("#clearStock")?.addEventListener("click",()=>{
+      if(confirm("Clear all in-stock amounts?")) setState(s=>{ s.stock={}; });
     });
   }
 
@@ -1086,9 +1136,10 @@ function importJson(e){
 function copyShopping(){
   const list=shoppingList(shopFrom,shopTo);
   const line=l=>`- ${l.name}: ${l.packStr} (${fmtEUR(l.cost)})`;
-  const txt=[`Supply run · ${shopFrom} – ${shopTo} · ${list.days} days`,"",
-    "🛒 FRESH", ...list.fresh.map(line), "",
-    "🫙 PANTRY", ...list.pantry.map(line), "",
+  const toBuy=arr=>arr.filter(l=>l.packs>0);
+  const txt=[`Supply run · ${shopFrom} – ${shopTo} · ${list.days} days (to buy, net of stock)`,"",
+    "🛒 FRESH", ...toBuy(list.fresh).map(line), "",
+    "🫙 PANTRY", ...toBuy(list.pantry).map(line), "",
     `💧 Water: ${list.water.liters} L (${fmtEUR(list.water.cost)})`, "",
     `TOTAL: ${fmtEUR(list.total)} (cap ${fmtEUR(state.settings.budgetCap)})`].join("\n");
   if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>alert("Shopping list copied ✓"),()=>fallbackCopy(txt)); }
