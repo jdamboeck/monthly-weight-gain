@@ -225,9 +225,10 @@ select.input{-webkit-appearance:none;appearance:none;padding-right:32px;backgrou
 .ing-row .input.num{text-align:right}
 .field-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3) var(--s4)}
 .field-grid .field--wide{grid-column:1/-1}
-.cell-input{width:76px;text-align:right;border:1px solid transparent;border-radius:9px;background:transparent;color:inherit;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:var(--t-sm);padding:6px 8px;min-height:32px}
-.cell-input:hover{border-color:var(--line-2);background:var(--panel-2)}
+.cell-input{width:74px;text-align:right;border:1px solid var(--line-2);border-radius:9px;background:var(--panel-2);color:inherit;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:var(--t-sm);padding:6px 8px;min-height:34px}
+.cell-input:hover{border-color:var(--player);background:var(--panel-3)}
 .cell-input:focus{outline:none;border-color:var(--player);background:var(--panel);box-shadow:0 0 0 3px var(--player-fill)}
+.codex td:has(.cell-input){position:relative}
 .codex{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
 .codex th{text-align:right;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding:var(--s2) 6px;border-bottom:1px solid var(--line)}
 .codex th:first-child{text-align:left}
@@ -729,14 +730,14 @@ function viewRecipes(){
   return screen("recipes",
     `<div class="section-title">Fuel cards · editable<span class="spacer">${Object.keys(state.recipes).length} collected</span></div>
      ${cards}
-     <div class="section-title">Ingredient codex<span class="spacer">prices & nutrition</span></div>
+     <div class="section-title">Ingredient codex<span class="spacer">✎ tap a value to edit</span></div>
      <div class="panel"><div class="panel__pad" style="overflow-x:auto">
        <table class="codex">
-         <thead><tr><th>Item</th><th>Unit</th><th>kcal/u</th><th>prot/u</th><th>Pack</th><th>Pack €</th><th>€/u</th></tr></thead>
+         <thead><tr><th>Item</th><th>Unit</th><th>✎ kcal/u</th><th>✎ prot/u</th><th>✎ Pack</th><th>✎ Pack €</th><th>€/u</th></tr></thead>
          <tbody>${codexRows}</tbody>
        </table>
      </div></div>
-     <div class="info" style="margin-top:var(--s3)"><h3>Everything recomputes live</h3><ul><li>Edit an amount or price → the card total, today's fuel bar, the supply run and treasury all update.</li></ul></div>`
+     <div class="info" style="margin-top:var(--s3)"><h3>Everything recomputes live</h3><ul><li>Boxed values (✎) are editable — change a price or kcal and the card totals, today's fuel bar, the supply run and treasury all update instantly.</li></ul></div>`
   );
 }
 
