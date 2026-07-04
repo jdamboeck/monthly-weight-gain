@@ -1,0 +1,1018 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0e1016">
+<title>Nana · Gain Quest</title>
+<style>
+/* ============================================================================
+ * NANA — GAIN QUEST · design system (inlined from design/design-system.css)
+ * Self-contained. System fonts only. Dark-first (hero) + light + print.
+ * ==========================================================================*/
+:root{
+  --bg:#0e1016;
+  --bg-glow1:#1a1430; --bg-glow2:#0c2018;
+  --panel:#171a23; --panel-2:#1f2330; --panel-3:#252a3a;
+  --line:#2b3040; --line-2:#3a4055;
+  --ink:#eef1f7; --mut:#9aa3b8; --faint:#6b7280;
+  --energy:#7bd154; --energy-d:#4ea832; --energy-weak:#16291320; --energy-glow:rgba(123,209,84,.45);
+  --energy-fill:#15291a;
+  --power:#ffb13d; --power-d:#e0902a; --power-fill:#2a2412;
+  --player:#8b7bff; --player-d:#6a57f0; --player-fill:#211d3a;
+  --flame:#ff6a3d; --flame-fill:#2a1612;
+  --water:#39a9d4; --water-fill:#10242c;
+  --banana:#ffd23f;
+  --radius:18px; --radius-sm:13px; --radius-lg:24px; --radius-pill:999px;
+  --s1:4px; --s2:8px; --s3:12px; --s4:16px; --s5:22px; --s6:30px; --s7:44px;
+  --t-xs:12px; --t-sm:13px; --t-md:15px; --t-lg:17px; --t-xl:21px; --t-2xl:27px; --t-3xl:36px; --t-4xl:46px;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
+  --shadow:0 2px 4px rgba(0,0,0,.3),0 8px 24px rgba(0,0,0,.35);
+  --shadow-up:0 12px 40px rgba(0,0,0,.5);
+  --tap:46px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){
+  :root{
+    --bg:#f1efe6;
+    --bg-glow1:#fff6cf; --bg-glow2:#e4f3dc;
+    --panel:#ffffff; --panel-2:#faf8f0; --panel-3:#f1eee2;
+    --line:#e6e2d4; --line-2:#d4cfbd;
+    --ink:#1b1a16; --mut:#6c6a60; --faint:#9a988c;
+    --energy:#3f9a23; --energy-d:#2f7d16; --energy-weak:#e7f3df; --energy-glow:rgba(63,154,35,.35);
+    --energy-fill:#e2f1d8;
+    --power:#cf850c; --power-d:#a86a06; --power-fill:#f8efd9;
+    --player:#6a57f0; --player-d:#5340d4; --player-fill:#ece9fd;
+    --flame:#dd4f1c; --flame-fill:#fbe7dd;
+    --water:#1f86ab; --water-fill:#dff0f6;
+    --banana:#e7ad00;
+    --shadow:0 1px 2px rgba(40,36,20,.06),0 6px 18px rgba(40,36,20,.07);
+    --shadow-up:0 14px 40px rgba(40,36,20,.16);
+    color-scheme:light;
+  }
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;font-family:var(--sans);font-size:var(--t-md);line-height:1.5;
+  color:var(--ink);background:var(--bg);
+  background-image:radial-gradient(900px 540px at 15% -8%,var(--bg-glow1) 0,transparent 60%),
+                   radial-gradient(820px 520px at 112% 4%,var(--bg-glow2) 0,transparent 55%);
+  background-attachment:fixed;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4,p{margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+input,select,button{font-family:inherit}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+.row{display:flex;align-items:center;gap:var(--s2)}
+.spacer{margin-left:auto}
+.app{max-width:520px;margin:0 auto;min-height:100vh;position:relative;display:flex;flex-direction:column}
+.screen{flex:1;padding:var(--s4) var(--s4) calc(96px + env(safe-area-inset-bottom))}
+.section-title{font-size:var(--t-xs);font-weight:900;letter-spacing:.16em;text-transform:uppercase;color:var(--mut);margin:var(--s5) var(--s2) var(--s3);display:flex;align-items:center;gap:8px}
+.section-title .spacer{font-weight:700;letter-spacing:.02em;text-transform:none;color:var(--faint);font-size:var(--t-xs)}
+.hint{color:var(--mut);font-size:var(--t-sm)}
+.caption{color:var(--faint);font-size:var(--t-xs)}
+.hud{position:sticky;top:0;z-index:30;display:flex;align-items:center;gap:var(--s3);padding:calc(env(safe-area-inset-top) + 12px) var(--s4) 12px;background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:saturate(1.5) blur(14px);backdrop-filter:saturate(1.5) blur(14px);border-bottom:1px solid var(--line)}
+.hud__brand{display:flex;align-items:center;gap:8px;font-weight:900;letter-spacing:-.01em}
+.hud__brand .mk{font-size:20px;line-height:1}
+.hud__brand .nm{font-size:var(--t-md)}
+.hud__brand .nm small{display:block;font-size:9px;font-weight:800;letter-spacing:.18em;color:var(--player);text-transform:uppercase;line-height:1;margin-top:2px}
+.hud__stats{margin-left:auto;display:flex;align-items:center;gap:var(--s2)}
+.hud-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:var(--radius-pill);font-size:var(--t-sm);font-weight:900;border:1px solid var(--line);background:var(--panel)}
+.hud-chip .num{font-size:var(--t-sm)}
+.hud-chip--streak{background:var(--flame-fill);border-color:color-mix(in srgb,var(--flame) 40%,transparent);color:var(--flame)}
+.hud-chip--xp{background:var(--player-fill);border-color:color-mix(in srgb,var(--player) 40%,transparent);color:var(--player)}
+.hud-chip--lvl{background:var(--panel-2)}
+.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:center;gap:2px;padding:8px max(12px,env(safe-area-inset-left)) calc(8px + env(safe-area-inset-bottom));background:color-mix(in srgb,var(--panel) 92%,transparent);-webkit-backdrop-filter:saturate(1.6) blur(18px);backdrop-filter:saturate(1.6) blur(18px);border-top:1px solid var(--line)}
+.tabbar__inner{display:flex;gap:2px;width:100%;max-width:520px}
+.tab{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:3px;min-height:var(--tap);padding:6px 2px;border:0;border-radius:14px;background:transparent;color:var(--mut);text-decoration:none;font-size:10px;font-weight:800;letter-spacing:.02em}
+.tab .ic{font-size:20px;line-height:1;filter:grayscale(.4);opacity:.7}
+.tab:hover{color:var(--ink);background:var(--panel-2)}
+.tab[aria-current="page"]{color:var(--player);background:var(--player-fill)}
+.tab[aria-current="page"] .ic{filter:none;opacity:1}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow)}
+.panel+.panel{margin-top:var(--s3)}
+.panel__pad{padding:var(--s4)}
+.panel__head{display:flex;align-items:center;gap:var(--s2);padding:var(--s4) var(--s4) 0}
+.panel__title{font-size:var(--t-lg);font-weight:900;letter-spacing:-.01em}
+.panel__foot{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s4);border-top:1px solid var(--line);background:var(--panel-2);border-radius:0 0 var(--radius) var(--radius)}
+.mascot{position:relative;text-align:center;overflow:hidden;border-radius:var(--radius-lg);padding:var(--s5) var(--s4) var(--s4);background:radial-gradient(130% 90% at 50% -10%,color-mix(in srgb,var(--energy) 22%,var(--panel)) 0,var(--panel) 62%);border:1px solid color-mix(in srgb,var(--energy) 35%,var(--line));box-shadow:var(--shadow),0 0 0 1px color-mix(in srgb,var(--energy) 12%,transparent)}
+.mascot.is-warn{background:radial-gradient(130% 90% at 50% -10%,color-mix(in srgb,var(--power) 22%,var(--panel)) 0,var(--panel) 62%);border-color:color-mix(in srgb,var(--power) 35%,var(--line))}
+.mascot__speech{display:inline-block;background:var(--ink);color:var(--bg);font-size:var(--t-sm);font-weight:900;padding:6px 13px;border-radius:14px;position:relative;margin-bottom:var(--s2);box-shadow:var(--shadow)}
+.mascot__speech:after{content:"";position:absolute;left:50%;bottom:-6px;transform:translateX(-50%) rotate(45deg);width:11px;height:11px;background:var(--ink);border-radius:2px}
+.mascot__buddy{font-size:80px;line-height:1;display:block;filter:drop-shadow(0 10px 16px rgba(0,0,0,.45));animation:nana-bob 2.8s ease-in-out infinite}
+@keyframes nana-bob{0%,100%{transform:translateY(0) rotate(-3deg)}50%{transform:translateY(-9px) rotate(3deg)}}
+@media (prefers-reduced-motion:reduce){.mascot__buddy{animation:none}}
+.fuelbar{position:relative;height:34px;border-radius:var(--radius-pill);background:var(--energy-fill);border:1px solid color-mix(in srgb,var(--energy) 30%,var(--line));overflow:hidden;margin:var(--s4) var(--s2) 0}
+.fuelbar__fill{position:absolute;inset:0 auto 0 0;height:100%;border-radius:var(--radius-pill);background:linear-gradient(90deg,var(--energy-d),var(--energy));box-shadow:0 0 20px var(--energy-glow)}
+.fuelbar__fill--warn{background:linear-gradient(90deg,var(--power-d),var(--power));box-shadow:none}
+.fuelbar__label{position:absolute;inset:0;display:grid;place-content:center;font-family:var(--mono);font-size:var(--t-sm);font-weight:900;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6);letter-spacing:.01em}
+.fuelbar__target{position:absolute;top:-3px;bottom:-3px;width:3px;background:var(--ink);opacity:.55;border-radius:2px}
+.fuelbar--sm{height:14px;margin:var(--s2) 0 0}
+.fuelbar--sm .fuelbar__label{font-size:10px}
+.pills{display:flex;justify-content:center;flex-wrap:wrap;gap:var(--s2);margin-top:var(--s3)}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--radius-pill);font-size:var(--t-sm);font-weight:900;border:1px solid transparent}
+.pill .num{font-size:var(--t-sm)}
+.pill--energy{background:var(--energy-fill);color:var(--energy);border-color:color-mix(in srgb,var(--energy) 35%,transparent)}
+.pill--power{background:var(--power-fill);color:var(--power);border-color:color-mix(in srgb,var(--power) 35%,transparent)}
+.pill--player{background:var(--player-fill);color:var(--player);border-color:color-mix(in srgb,var(--player) 35%,transparent)}
+.pill--flame{background:var(--flame-fill);color:var(--flame);border-color:color-mix(in srgb,var(--flame) 35%,transparent)}
+.pill--water{background:var(--water-fill);color:var(--water);border-color:color-mix(in srgb,var(--water) 35%,transparent)}
+.pill--ghost{background:var(--panel-2);color:var(--mut);border-color:var(--line)}
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--s2);margin-top:var(--s3)}
+.tile{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);padding:var(--s3);box-shadow:var(--shadow)}
+.tile__label{font-size:10px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--mut);display:flex;align-items:center;gap:5px}
+.tile__value{font-size:var(--t-xl);font-weight:900;font-family:var(--mono);margin-top:3px}
+.tile__value .u{font-size:var(--t-sm);color:var(--mut);font-family:var(--sans);margin-left:2px}
+.tile--energy{border-color:color-mix(in srgb,var(--energy) 30%,var(--line))}
+.tile--energy .tile__value{color:var(--energy)}
+.tile--power{border-color:color-mix(in srgb,var(--power) 30%,var(--line))}
+.tile--power .tile__value{color:var(--power)}
+.feedgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s2)}
+.feedslot{display:flex;flex-direction:column;align-items:center;gap:4px;padding:var(--s3) var(--s1);min-height:var(--tap);background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-sm);color:var(--mut);text-align:center}
+.feedslot .ic{font-size:22px;line-height:1}
+.feedslot .nm{font-size:10px;font-weight:800}
+.feedslot.is-fed{background:var(--energy-fill);border-color:var(--energy-d);color:var(--energy)}
+.feedslot.is-fed .nm:after{content:" ✓"}
+.feed-card{display:flex;gap:var(--s3);align-items:center;padding:var(--s3) var(--s3) var(--s3) var(--s4);background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);transition:border-color .15s,background .15s,transform .05s}
+.feed-card+.feed-card{margin-top:var(--s2)}
+.feed-card__slot{display:flex;flex-direction:column;align-items:center;gap:2px;width:46px;flex:0 0 46px}
+.feed-card__icon{font-size:24px;line-height:1}
+.feed-card__time{font-size:9px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.feed-card__body{flex:1;min-width:0}
+.feed-card__name{font-size:var(--t-md);font-weight:800;letter-spacing:-.01em}
+.feed-card__macros{display:flex;flex-wrap:wrap;gap:var(--s3);margin-top:4px}
+.feed-card__macros span{font-size:var(--t-xs);color:var(--mut);font-weight:700;font-family:var(--mono)}
+.feed-card__macros b{color:var(--ink)}
+.feed-card__ings{font-size:var(--t-xs);color:var(--faint);margin-top:5px;line-height:1.4}
+.feed-card.is-done{background:var(--panel-2)}
+.feed-card.is-done .feed-card__name{color:var(--mut);text-decoration:line-through;text-decoration-color:var(--line-2)}
+.feedbtn{appearance:none;-webkit-appearance:none;flex:0 0 auto;width:var(--tap);height:var(--tap);border-radius:14px;border:2px solid var(--line-2);background:var(--panel-2);display:grid;place-content:center;position:relative;font-size:11px;font-weight:900;letter-spacing:.04em;color:var(--mut);text-transform:uppercase;transition:background .15s,border-color .15s,transform .06s}
+.feedbtn:before{content:"FEED"}
+.feedbtn:hover{border-color:var(--energy);color:var(--energy)}
+.feedbtn:active{transform:scale(.94)}
+.feedbtn:checked{background:var(--energy);border-color:var(--energy);color:#06210a}
+.feedbtn:checked:before{content:"✓";font-size:24px}
+.feedbtn:focus-visible{outline:3px solid var(--player-fill);outline-offset:2px}
+.feedbtn--sm{width:36px;height:36px;border-radius:11px}
+.feedbtn--sm:before{content:""}
+.feedbtn--sm:checked:before{content:"✓";font-size:18px}
+.streak{display:flex;align-items:center;gap:var(--s3);margin-top:var(--s3);padding:var(--s3) var(--s4);border-radius:var(--radius);background:linear-gradient(120deg,var(--flame-fill),var(--panel));border:1px solid color-mix(in srgb,var(--flame) 35%,var(--line))}
+.streak__flame{font-size:26px;line-height:1}
+.streak__body b{font-size:var(--t-lg);font-weight:900}
+.streak__body span{display:block;font-size:var(--t-xs);color:var(--mut)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--s2);min-height:var(--tap);padding:0 var(--s4);border-radius:14px;border:1px solid var(--line-2);background:var(--panel-2);color:var(--ink);font-size:var(--t-md);font-weight:800;text-decoration:none;transition:background .15s,border-color .15s,transform .05s}
+.btn:hover{border-color:var(--player);background:var(--panel-3)}
+.btn:active{transform:translateY(1px)}
+.btn--primary{background:var(--player);border-color:var(--player);color:#fff}
+.btn--primary:hover{background:var(--player-d);border-color:var(--player-d)}
+.btn--energy{background:var(--energy);border-color:var(--energy);color:#06210a}
+.btn--energy:hover{filter:brightness(1.05)}
+.btn--ghost{background:transparent;border-color:transparent;color:var(--player)}
+.btn--ghost:hover{background:var(--player-fill);border-color:transparent}
+.btn--danger{color:var(--flame);border-color:color-mix(in srgb,var(--flame) 45%,var(--line-2));background:var(--panel-2)}
+.btn--danger:hover{background:var(--flame-fill);border-color:var(--flame)}
+.btn--sm{min-height:38px;padding:0 var(--s3);font-size:var(--t-sm);border-radius:11px}
+.btn--block{width:100%}
+.btn-row{display:flex;gap:var(--s2);flex-wrap:wrap}
+.toggle{display:inline-flex;padding:3px;gap:3px;background:var(--panel-2);border:1px solid var(--line);border-radius:13px}
+.toggle button{min-height:36px;padding:0 var(--s3);border:0;border-radius:10px;background:transparent;color:var(--mut);font-size:var(--t-sm);font-weight:800}
+.toggle button[aria-pressed="true"]{background:var(--player);color:#fff;box-shadow:var(--shadow)}
+.journey{display:flex;flex-direction:column;gap:0;position:relative;padding:var(--s2) 0}
+.stop{display:flex;gap:var(--s3);position:relative;padding-bottom:var(--s3)}
+.stop__rail{display:flex;flex-direction:column;align-items:center;flex:0 0 46px}
+.stop__node{width:46px;height:46px;border-radius:15px;flex:0 0 auto;display:grid;place-content:center;font-family:var(--mono);font-weight:900;font-size:var(--t-md);background:var(--panel);border:2px solid var(--line-2);color:var(--mut);z-index:1}
+.stop__line{flex:1;width:3px;background:var(--line);border-radius:2px;margin:4px 0 -4px}
+.stop:last-child .stop__line{display:none}
+.stop.is-current .stop__node{background:var(--player);border-color:var(--player);color:#fff;box-shadow:0 0 0 4px var(--player-fill)}
+.stop.is-done .stop__node{background:var(--energy-fill);border-color:var(--energy-d);color:var(--energy)}
+.stop.is-done .stop__line{background:var(--energy-d)}
+.stop__card{flex:1;min-width:0;margin-bottom:var(--s2);background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:var(--s3) var(--s4);box-shadow:var(--shadow)}
+.stop.is-current .stop__card{border-color:color-mix(in srgb,var(--player) 45%,var(--line));background:color-mix(in srgb,var(--player) 8%,var(--panel))}
+.stop__top{display:flex;align-items:baseline;gap:var(--s2);margin-bottom:6px}
+.stop__day{font-weight:900;font-size:var(--t-md)}
+.stop__meals{font-size:var(--t-xs);color:var(--mut);line-height:1.5}
+.stop__meals b{color:var(--ink);font-weight:700}
+.stop__stats{display:flex;gap:var(--s2);margin-top:var(--s2);flex-wrap:wrap}
+.fuelcard{border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow);border:1px solid color-mix(in srgb,var(--player) 30%,var(--line));background:var(--panel);margin-bottom:var(--s3)}
+.fuelcard__top{display:flex;align-items:center;gap:var(--s3);padding:var(--s4);background:linear-gradient(120deg,var(--player-fill),var(--panel));border-bottom:1px solid var(--line)}
+.fuelcard__emoji{font-size:30px;line-height:1}
+.fuelcard__id{font-family:var(--mono);font-size:11px;font-weight:900;color:var(--player);letter-spacing:.1em}
+.fuelcard__name{font-size:var(--t-lg);font-weight:900;letter-spacing:-.01em}
+.fuelcard__rarity{margin-left:auto}
+.fuelcard__body{padding:var(--s3) var(--s4)}
+.fuelcard__foot{display:flex;align-items:center;gap:var(--s2);padding:var(--s3) var(--s4);background:var(--panel-2);border-top:1px solid var(--line)}
+.fuelcard__foot .total{margin-left:auto;font-weight:900;font-size:var(--t-lg);font-family:var(--mono)}
+.ing-row{display:grid;grid-template-columns:1fr 70px auto 1fr 34px;align-items:center;gap:var(--s2);padding:var(--s2) 0;border-bottom:1px solid var(--line)}
+.ing-row:last-of-type{border-bottom:0}
+.ing-row .ing-stats{text-align:right;font-family:var(--mono);font-size:var(--t-xs);color:var(--mut)}
+.ing-row .ing-stats b{color:var(--ink);font-weight:800}
+.ing-unit{font-size:var(--t-sm);color:var(--mut)}
+.ing-remove{width:34px;height:34px;border-radius:10px;border:1px solid transparent;background:transparent;color:var(--faint);font-size:16px;line-height:1}
+.ing-remove:hover{background:var(--flame-fill);color:var(--flame)}
+.ing-add{display:inline-flex;align-items:center;gap:var(--s2);margin-top:var(--s2);min-height:40px;padding:0 var(--s3);border:1px dashed var(--line-2);border-radius:12px;background:transparent;color:var(--player);font-weight:800;font-size:var(--t-sm)}
+.ing-add:hover{background:var(--player-fill);border-style:solid}
+.field{display:flex;flex-direction:column;gap:6px}
+.field__label{font-size:var(--t-sm);font-weight:800;color:var(--mut)}
+.field__hint{font-size:var(--t-xs);color:var(--faint)}
+.input,select.input{min-height:var(--tap);padding:0 var(--s3);border:1px solid var(--line-2);border-radius:12px;background:var(--panel-2);color:var(--ink);font-size:var(--t-md);width:100%}
+select.input{-webkit-appearance:none;appearance:none;padding-right:32px;background-image:linear-gradient(45deg,transparent 50%,var(--mut) 50%),linear-gradient(135deg,var(--mut) 50%,transparent 50%);background-position:calc(100% - 16px) center,calc(100% - 11px) center;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+.input:focus,select.input:focus{outline:none;border-color:var(--player);box-shadow:0 0 0 3px var(--player-fill)}
+.input.num{text-align:right}
+.ing-row .input{min-height:38px}
+.ing-row .input.num{text-align:right}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--s3) var(--s4)}
+.field-grid .field--wide{grid-column:1/-1}
+.cell-input{width:76px;text-align:right;border:1px solid transparent;border-radius:9px;background:transparent;color:inherit;font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:var(--t-sm);padding:6px 8px;min-height:32px}
+.cell-input:hover{border-color:var(--line-2);background:var(--panel-2)}
+.cell-input:focus{outline:none;border-color:var(--player);background:var(--panel);box-shadow:0 0 0 3px var(--player-fill)}
+.codex{width:100%;border-collapse:collapse;font-size:var(--t-sm)}
+.codex th{text-align:right;font-size:10px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--mut);padding:var(--s2) 6px;border-bottom:1px solid var(--line)}
+.codex th:first-child{text-align:left}
+.codex td{padding:2px 4px;border-bottom:1px solid var(--line);text-align:right}
+.codex td:first-child{text-align:left;font-weight:700;padding-left:6px}
+.codex td .u{color:var(--faint);font-size:var(--t-xs)}
+.codex tr:last-child td{border-bottom:0}
+.loot-head{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);border-radius:var(--radius) var(--radius) 0 0;border:1px solid var(--line);border-bottom:0}
+.loot-head .ic{font-size:22px}
+.loot-head .nm{font-weight:900;font-size:var(--t-md)}
+.loot-head .sub{font-size:var(--t-xs);color:var(--mut)}
+.loot-head--fresh{background:linear-gradient(120deg,var(--energy-fill),var(--panel))}
+.loot-head--pantry{background:linear-gradient(120deg,var(--power-fill),var(--panel))}
+.loot-head--water{background:linear-gradient(120deg,var(--water-fill),var(--panel))}
+.loot-head .price{margin-left:auto;font-family:var(--mono);font-weight:900;font-size:var(--t-lg)}
+.loot-list{border:1px solid var(--line);border-radius:0 0 var(--radius) var(--radius);overflow:hidden;background:var(--panel);box-shadow:var(--shadow);margin-bottom:var(--s3)}
+.loot{display:flex;align-items:center;gap:var(--s3);padding:var(--s3) var(--s4);border-bottom:1px solid var(--line)}
+.loot:last-child{border-bottom:0}
+.loot__body{flex:1;min-width:0}
+.loot__name{font-weight:700;font-size:var(--t-sm)}
+.loot__need{font-size:var(--t-xs);color:var(--faint);font-family:var(--mono)}
+.loot__pack{font-size:var(--t-xs);font-weight:800;color:var(--mut);background:var(--panel-2);border:1px solid var(--line);padding:3px 8px;border-radius:var(--radius-pill);white-space:nowrap}
+.loot__price{font-family:var(--mono);font-weight:800;font-size:var(--t-sm);width:54px;text-align:right}
+.loot.is-checked{background:var(--panel-2)}
+.loot.is-checked .loot__name{color:var(--mut);text-decoration:line-through;text-decoration-color:var(--line-2)}
+.treasury{background:linear-gradient(135deg,color-mix(in srgb,var(--energy) 14%,var(--panel)),var(--panel));border:1px solid color-mix(in srgb,var(--energy) 35%,var(--line));border-radius:var(--radius-lg);padding:var(--s4);box-shadow:var(--shadow)}
+.treasury__row{display:flex;align-items:baseline;gap:var(--s2);font-size:var(--t-sm);color:var(--mut)}
+.treasury__grand{display:flex;align-items:baseline;gap:var(--s2);margin-top:var(--s2)}
+.treasury__grand b{font-size:var(--t-3xl);font-weight:900;font-family:var(--mono)}
+.divider{height:1px;background:var(--line);border:0;margin:var(--s3) 0}
+.qpath{display:flex;flex-direction:column}
+.qstop{display:flex;gap:var(--s3);position:relative}
+.qstop__rail{display:flex;flex-direction:column;align-items:center;flex:0 0 40px}
+.qstop__node{width:40px;height:40px;border-radius:13px;display:grid;place-content:center;font-family:var(--mono);font-weight:900;font-size:var(--t-sm);background:var(--panel);border:2px solid var(--line-2);color:var(--mut);z-index:1}
+.qstop__line{flex:1;width:3px;background:var(--line);min-height:14px}
+.qstop:last-child .qstop__line{display:none}
+.qstop.is-done .qstop__node{background:var(--energy);border-color:var(--energy);color:#06210a}
+.qstop.is-done .qstop__line{background:var(--energy)}
+.qstop__body{flex:1;padding-bottom:var(--s4)}
+.qstop__title{font-weight:800;font-size:var(--t-md)}
+.qstop__sub{font-size:var(--t-xs);color:var(--mut)}
+.qstop__tag{display:inline-flex;align-items:center;gap:5px;margin-top:6px;font-size:var(--t-xs);font-weight:900;padding:3px 9px;border-radius:var(--radius-pill);background:var(--power-fill);color:var(--power);border:1px solid color-mix(in srgb,var(--power) 35%,transparent)}
+.qstop__check{margin-left:auto}
+.info{border:1px solid var(--line);border-left:4px solid var(--player);background:var(--panel-2);border-radius:var(--radius-sm);padding:var(--s4)}
+.info h3{font-size:var(--t-md);font-weight:900;margin-bottom:6px}
+.info ul{margin:6px 0 0;padding-left:18px;color:var(--mut);font-size:var(--t-sm)}
+.info li{margin:4px 0}
+.empty{text-align:center;color:var(--mut);padding:var(--s6) var(--s4);border:1px dashed var(--line-2);border-radius:var(--radius)}
+.empty__icon{font-size:40px;display:block;margin-bottom:var(--s2);filter:grayscale(.3)}
+@media print{
+  :root{--bg:#fff;--panel:#fff;--panel-2:#fff;--panel-3:#fff;--ink:#000;--mut:#444;--faint:#666;--line:#bbb;--line-2:#999;--shadow:none;--shadow-up:none;color-scheme:light}
+  body{background:#fff;background-image:none}
+  .hud,.tabbar,.toggle,.range-controls,.no-print{display:none!important}
+  .app{max-width:none}.screen{padding:0}
+  .loot-list,.treasury,.panel{box-shadow:none;break-inside:avoid}
+  .print-only{display:block!important}
+}
+.print-only{display:none}
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+<script>
+"use strict";
+/* ============================================================================
+ * NANA — GAIN QUEST · app logic (vanilla, single-file, localStorage-only)
+ * Layers: SEED data → store → compute (+ gamification/water) → views → router
+ * ==========================================================================*/
+
+/* ---- SEED DATA (canonical, from design/seed-data.js) --------------------- */
+const SEED_INGREDIENTS = {
+  milk:        { name:"Whole milk 3.5%",      unit:"ml",   kcalPer:0.64, proteinPer:0.034, pricePer:0.0011,  pack:1000, packPrice:1.10, packLabel:"1 L carton", group:"fresh" },
+  oats:        { name:"Oats",                 unit:"g",    kcalPer:3.70, proteinPer:0.13,  pricePer:0.00163, pack:500,  packPrice:0.81, packLabel:"500 g",      group:"pantry" },
+  banana:      { name:"Banana",               unit:"each", kcalPer:105,  proteinPer:1.3,   pricePer:0.20,    pack:1,    packPrice:0.20, packLabel:"each",       group:"fresh" },
+  peanutButter:{ name:"Peanut butter",        unit:"g",    kcalPer:5.88, proteinPer:0.25,  pricePer:0.00475, pack:1000, packPrice:4.75, packLabel:"1 kg jar",   group:"pantry" },
+  honey:       { name:"Honey",                unit:"tbsp", kcalPer:64,   proteinPer:0.06,  pricePer:0.14,    pack:500,  packPrice:3.50, packLabel:"500 g",      group:"pantry" },
+  flaxseed:    { name:"Ground flaxseed",      unit:"tbsp", kcalPer:55,   proteinPer:1.9,   pricePer:0.045,   pack:500,  packPrice:1.50, packLabel:"500 g",      group:"pantry" },
+  blueberries: { name:"Frozen blueberries",   unit:"g",    kcalPer:0.57, proteinPer:0.007, pricePer:0.00698, pack:1000, packPrice:6.98, packLabel:"1 kg",       group:"pantry" },
+  mixedBerries:{ name:"Frozen mixed berries", unit:"g",    kcalPer:0.50, proteinPer:0.009, pricePer:0.0056,  pack:1000, packPrice:5.60, packLabel:"1 kg",       group:"pantry" },
+  walnuts:     { name:"Walnuts",              unit:"g",    kcalPer:6.54, proteinPer:0.15,  pricePer:0.014,   pack:700,  packPrice:9.80, packLabel:"700 g",      group:"pantry" },
+  almonds:     { name:"Almonds",              unit:"g",    kcalPer:5.79, proteinPer:0.21,  pricePer:0.0125,  pack:400,  packPrice:5.00, packLabel:"400 g",      group:"pantry" },
+  cocoa:       { name:"Cocoa powder",         unit:"tbsp", kcalPer:12,   proteinPer:1.0,   pricePer:0.06,    pack:250,  packPrice:1.50, packLabel:"250 g box",  group:"pantry" },
+  greekYogurt: { name:"Greek yogurt 10%",     unit:"g",    kcalPer:1.30, proteinPer:0.058, pricePer:0.00358, pack:500,  packPrice:1.79, packLabel:"500 g",      group:"fresh" },
+  gouda:       { name:"Gouda/Emmentaler",     unit:"g",    kcalPer:3.56, proteinPer:0.25,  pricePer:0.00853, pack:150,  packPrice:1.28, packLabel:"150 g",      group:"fresh" },
+  bread:       { name:"Wholegrain bread",     unit:"slice",kcalPer:80,   proteinPer:4,     pricePer:0.07,    pack:20,   packPrice:1.40, packLabel:"loaf ≈20 sl",group:"fresh" },
+  avocado:     { name:"Avocado",              unit:"each", kcalPer:240,  proteinPer:3,     pricePer:0.70,    pack:1,    packPrice:0.70, packLabel:"each",       group:"fresh" },
+  kiwi:        { name:"Kiwi",                 unit:"each", kcalPer:42,   proteinPer:0.8,   pricePer:0.30,    pack:1,    packPrice:0.30, packLabel:"each",       group:"fresh" },
+  orange:      { name:"Orange",               unit:"each", kcalPer:62,   proteinPer:1.2,   pricePer:0.30,    pack:1,    packPrice:0.30, packLabel:"each",       group:"fresh" },
+  redPepper:   { name:"Red pepper",           unit:"each", kcalPer:37,   proteinPer:1.2,   pricePer:0.60,    pack:1,    packPrice:0.60, packLabel:"each",       group:"fresh" },
+  cherryTom:   { name:"Cherry tomatoes",      unit:"g",    kcalPer:0.18, proteinPer:0.009, pricePer:0.006,   pack:250,  packPrice:1.50, packLabel:"250 g",      group:"fresh" },
+  tuna:        { name:"Canned tuna",          unit:"can",  kcalPer:191,  proteinPer:42,    pricePer:0.90,    pack:1,    packPrice:0.90, packLabel:"can",        group:"fresh" },
+  kidneyBeans: { name:"Kidney beans",         unit:"can",  kcalPer:215,  proteinPer:14,    pricePer:0.90,    pack:1,    packPrice:0.90, packLabel:"can",        group:"fresh" },
+  oliveOil:    { name:"Olive oil (extra)",    unit:"tbsp", kcalPer:120,  proteinPer:0,     pricePer:0.10,    pack:750,  packPrice:5.00, packLabel:"750 ml",     group:"pantry" },
+};
+const SEED_RECIPES = {
+  S1:   { name:"Peanut-Banana",     kind:"shake", emoji:"🥤", items:[["milk",500],["oats",80],["banana",1],["peanutButter",30],["honey",1],["flaxseed",1]] },
+  S2:   { name:"Blueberry-Walnut",  kind:"shake", emoji:"🥤", items:[["milk",500],["oats",60],["blueberries",100],["peanutButter",30],["walnuts",25],["honey",1]] },
+  S3:   { name:"Cocoa-Banana",      kind:"shake", emoji:"🥤", items:[["milk",500],["oats",70],["banana",1],["peanutButter",25],["cocoa",1],["honey",1],["almonds",15]] },
+  S4:   { name:"Berry-Yogurt",      kind:"shake", emoji:"🥤", items:[["milk",300],["greekYogurt",150],["oats",60],["mixedBerries",100],["peanutButter",25],["honey",1],["flaxseed",1]] },
+  A_mid:{ name:"Avocado-Cheese bread",  kind:"solid", emoji:"🥪", items:[["bread",2],["avocado",0.5],["gouda",50],["redPepper",1]] },
+  A_aft:{ name:"Yogurt, walnuts & kiwi",kind:"solid", emoji:"🥣", items:[["greekYogurt",200],["honey",1],["walnuts",20],["kiwi",1]] },
+  B_mid:{ name:"Tuna-bean salad",       kind:"solid", emoji:"🥗", items:[["tuna",1],["kidneyBeans",1],["oliveOil",1],["avocado",0.5]] },
+  B_aft:{ name:"PB bread, banana & orange",kind:"solid", emoji:"🍞", items:[["bread",1],["peanutButter",20],["banana",1],["orange",1]] },
+  C_mid:{ name:"Cheese-honey bread",    kind:"solid", emoji:"🧀", items:[["bread",3],["gouda",60],["avocado",0.5],["cherryTom",100]] },
+  C_aft:{ name:"Yogurt, almonds & orange",kind:"solid", emoji:"🥣", items:[["greekYogurt",150],["honey",1],["almonds",25],["orange",1]] },
+};
+const SEED_ROTATION = [
+  { morning:"S1", midday:"A_mid", afternoon:"A_aft", evening:"S2" },
+  { morning:"S3", midday:"B_mid", afternoon:"B_aft", evening:"S1" },
+  { morning:"S2", midday:"C_mid", afternoon:"C_aft", evening:"S4" },
+  { morning:"S1", midday:"A_mid", afternoon:"A_aft", evening:"S3" },
+  { morning:"S4", midday:"B_mid", afternoon:"B_aft", evening:"S2" },
+  { morning:"S2", midday:"C_mid", afternoon:"C_aft", evening:"S1" },
+];
+const SEED_SETTINGS = {
+  startDate:"2026-06-29", planDays:30,
+  waterPerDayL:2, waterPricePerL:0.66,
+  kcalTarget:[3000,3200], proteinTarget:110, budgetCap:270,
+  shoppingByPack:true,
+};
+const SLOTS = ["morning","midday","afternoon","evening"];
+const SLOT_META = {
+  morning:  { icon:"🌅", time:"Morn" },
+  midday:   { icon:"☀️", time:"Mid" },
+  afternoon:{ icon:"🌤️", time:"Aft" },
+  evening:  { icon:"🌙", time:"Eve" },
+};
+const CYCLE_TAGS = { 1:"🫙 full pantry stock-up", 5:"🫙 pantry top-up", 10:"🏆 final boss" };
+const XP_PER_MEAL = 25, XP_BOSS_BONUS = 100;
+
+/* ---- STORE --------------------------------------------------------------- */
+const LS_KEY = "mwg.v1";
+const SCHEMA_VERSION = 2;
+
+function freshState(){
+  return {
+    version: SCHEMA_VERSION,
+    ingredients: structuredClone(SEED_INGREDIENTS),
+    recipes: structuredClone(SEED_RECIPES),
+    rotation: structuredClone(SEED_ROTATION),
+    settings: structuredClone(SEED_SETTINGS),
+    checks: { meals:{}, cycles:{}, pantry:{ start:false, mid:false } },
+    water: {},
+    game: { xp:0 },
+  };
+}
+function migrate(s){
+  if(!s || typeof s!=="object") return freshState();
+  if(!s.water) s.water = {};
+  if(!s.game) s.game = { xp:0 };
+  if(!s.checks) s.checks = { meals:{}, cycles:{}, pantry:{ start:false, mid:false } };
+  if(!s.checks.meals) s.checks.meals = {};
+  if(!s.checks.cycles) s.checks.cycles = {};
+  if(!s.checks.pantry) s.checks.pantry = { start:false, mid:false };
+  s.version = SCHEMA_VERSION;
+  return s;
+}
+let state = load();
+function load(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return freshState();
+    const parsed = migrate(JSON.parse(raw));
+    parsed.game.xp = totalXp(parsed);      // reconcile XP from history (idempotent)
+    return parsed;
+  }catch(e){ return freshState(); }
+}
+function persist(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){}
+}
+function setState(fn){
+  fn(state);
+  state.game.xp = totalXp(state);          // keep XP in sync with checks
+  persist();
+  render();
+}
+function resetState(){ state = freshState(); persist(); render(); }
+
+/* ---- DATE HELPERS -------------------------------------------------------- */
+function todayISO(){ return toISO(new Date()); }
+function toISO(d){
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+function parseISO(s){ const [y,m,d]=s.split("-").map(Number); return new Date(Date.UTC(y,m-1,d)); }
+function daysBetween(aISO,bISO){ return Math.round((parseISO(bISO)-parseISO(aISO))/86400000); }
+function addDaysISO(iso,n){ const d=parseISO(iso); d.setUTCDate(d.getUTCDate()+n); return toISO(d); }
+function fmtDate(iso){
+  const d=parseISO(iso);
+  return d.toLocaleDateString(undefined,{weekday:"short",day:"numeric",month:"short",timeZone:"UTC"});
+}
+
+/* ---- FORMATTERS ---------------------------------------------------------- */
+const eurFmt = new Intl.NumberFormat("de-DE",{style:"currency",currency:"EUR"});
+function fmtEUR(n){ return eurFmt.format(n||0); }
+function fmtNum(n){ return new Intl.NumberFormat("en-US").format(Math.round(n||0)); }
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
+
+/* ---- COMPUTE: nutrition & cost ------------------------------------------- */
+function ing(key){ return state.ingredients[key]; }
+function recipeStats(rk){
+  const r = state.recipes[rk];
+  let kcal=0, protein=0, cost=0;
+  if(r) for(const [k,q] of r.items){
+    const g = ing(k); if(!g) continue;
+    kcal += q*g.kcalPer; protein += q*g.proteinPer; cost += q*g.pricePer;
+  }
+  return { kcal, protein, cost };
+}
+function itemStats(k,q){ const g=ing(k); return g?{kcal:q*g.kcalPer,cost:q*g.pricePer}:{kcal:0,cost:0}; }
+function ingList(rk){
+  const r = state.recipes[rk]; if(!r) return "";
+  return r.items.map(([k,q])=>{ const g=ing(k); if(!g) return ""; return prettyAmt(q,g.unit)+" "+shortName(g.name); }).filter(Boolean).join(" · ");
+}
+function shortName(n){ return n.replace(/ \(.*\)$/,"").replace("Whole milk 3.5%","milk").replace("Peanut butter","PB"); }
+function prettyAmt(q,unit){
+  if(unit==="each") return q===0.5?"½":String(q);
+  if(unit==="slice") return q+" sl";
+  if(unit==="can") return q+" can";
+  if(unit==="tbsp") return q+" tbsp";
+  return q+" "+unit;
+}
+function rotationDayFor(iso){
+  const n = daysBetween(state.settings.startDate, iso);
+  const len = state.rotation.length;
+  return ((n % len)+len)%len; // 0..len-1
+}
+function mealsForDate(iso){ return state.rotation[rotationDayFor(iso)]; }
+function dayStats(iso){
+  const day = mealsForDate(iso);
+  let kcal=0,protein=0,cost=0;
+  for(const slot of SLOTS){ const s=recipeStats(day[slot]); kcal+=s.kcal; protein+=s.protein; cost+=s.cost; }
+  const [kmin,kmax]=state.settings.kcalTarget;
+  return { kcal, protein, cost,
+    kcalInTarget: kcal>=kmin && kcal<=kmax,
+    proteinInTarget: protein>=state.settings.proteinTarget };
+}
+
+/* ---- COMPUTE: gamification (all derived; only xp stored) ----------------- */
+function fedMeals(iso, st){ const m=(st||state).checks.meals[iso]; if(!m) return 0; return SLOTS.reduce((a,s)=>a+(m[s]?1:0),0); }
+function isFed(iso,slot){ const m=state.checks.meals[iso]; return !!(m&&m[slot]); }
+function xpForDate(iso, st){ const fed=fedMeals(iso,st); return fed*XP_PER_MEAL + (fed===4?XP_BOSS_BONUS:0); }
+function totalXp(st){ return Object.keys(st.checks.meals).reduce((a,iso)=>a+xpForDate(iso,st),0); }
+function level(xp){ return Math.floor(Math.sqrt(xp/50))+1; }
+function xpIntoLevel(xp){ const l=level(xp); const base=50*(l-1)*(l-1); return { into:xp-base, span:50*(l*l-(l-1)*(l-1)) }; }
+function bossWins(st){ return Object.keys((st||state).checks.meals).filter(iso=>fedMeals(iso,st)===4).length; }
+function streak(){
+  // consecutive fully-fed days ending yesterday-or-today; today counts if fully fed
+  let s=0, cur=todayISO();
+  if(fedMeals(cur)<4) cur=addDaysISO(cur,-1);
+  while(fedMeals(cur)===4){ s++; cur=addDaysISO(cur,-1); }
+  return s;
+}
+function daysComplete(){
+  const {startDate,planDays}=state.settings;
+  let c=0;
+  for(let i=0;i<planDays;i++){ if(fedMeals(addDaysISO(startDate,i))===4) c++; }
+  return c;
+}
+function currentCycle(iso){ const n=daysBetween(state.settings.startDate,iso); if(n<0) return null; return Math.floor(n/3)+1; }
+function rarity(kcal){ return kcal>=1000?{s:"★★★ epic fuel",cls:"pill--player"}:kcal>=600?{s:"★★ rare",cls:"pill--power"}:{s:"★ common",cls:"pill--ghost"}; }
+
+/* ---- COMPUTE: water ------------------------------------------------------ */
+function waterLoggedFor(iso){ return state.water[iso]||0; }
+function logWater(iso,liters){ setState(s=>{ if(liters<=0) delete s.water[iso]; else s.water[iso]=liters; }); }
+
+/* ---- COMPUTE: shopping --------------------------------------------------- */
+function accumulate(fromISO,toISO){
+  const totals={}; const days=daysBetween(fromISO,toISO)+1;
+  for(let i=0;i<days;i++){
+    const iso=addDaysISO(fromISO,i); const day=mealsForDate(iso);
+    for(const slot of SLOTS){ const r=state.recipes[day[slot]]; if(!r) continue;
+      for(const [k,q] of r.items){ totals[k]=(totals[k]||0)+q; } }
+  }
+  return { totals, days };
+}
+function lineFor(k,total,byPack){
+  const g=ing(k);
+  const packs=Math.ceil(total/g.pack);
+  const cost = byPack ? packs*g.packPrice : total*g.pricePer;
+  const packStr = g.pack===1 ? packs+(g.unit==="each"?" ea":g.unit==="can"?"":" "+g.unit)
+                : (g.name==="Wholegrain bread"? packs+(packs>1?" loaves":" loaf") : packs+" × "+g.packLabel);
+  return { key:k, name:g.name, total, unit:g.unit, packs, packLabel:g.packLabel, packStr, cost, group:g.group };
+}
+function shoppingList(fromISO,toISO){
+  const byPack=state.settings.shoppingByPack;
+  const { totals, days }=accumulate(fromISO,toISO);
+  const fresh=[], pantry=[];
+  for(const k of Object.keys(totals)){
+    const line=lineFor(k,totals[k],byPack);
+    (line.group==="fresh"?fresh:pantry).push(line);
+  }
+  fresh.sort((a,b)=>b.cost-a.cost); pantry.sort((a,b)=>b.cost-a.cost);
+  const liters=days*state.settings.waterPerDayL;
+  const water={ liters, cost:liters*state.settings.waterPricePerL };
+  const total=[...fresh,...pantry].reduce((a,l)=>a+l.cost,0)+water.cost;
+  return { fresh, pantry, water, total, days };
+}
+function monthlyBudget(){
+  // fresh = sum of 10 per-3-day runs (each pack-rounded); pantry = whole-month once; water = month.
+  const {startDate,planDays,budgetCap}=state.settings;
+  const byPack=state.settings.shoppingByPack;
+  let freshCost=0;
+  const runs=Math.ceil(planDays/3);
+  for(let r=0;r<runs;r++){
+    const f=addDaysISO(startDate,r*3), t=addDaysISO(startDate,Math.min(r*3+2,planDays-1));
+    const {totals}=accumulate(f,t);
+    for(const k of Object.keys(totals)){ if(ing(k).group==="fresh"){ freshCost+=lineFor(k,totals[k],byPack).cost; } }
+  }
+  const monthEnd=addDaysISO(startDate,planDays-1);
+  const {totals}=accumulate(startDate,monthEnd);
+  let pantryCost=0;
+  for(const k of Object.keys(totals)){ if(ing(k).group==="pantry"){ pantryCost+=lineFor(k,totals[k],byPack).cost; } }
+  const waterCost=planDays*state.settings.waterPerDayL*state.settings.waterPricePerL;
+  const total=freshCost+pantryCost+waterCost;
+  return { fresh:freshCost, pantry:pantryCost, water:waterCost, total, cap:budgetCap, buffer:budgetCap-total };
+}
+
+/* ============================================================================
+ * VIEWS  — each returns an HTML string; reproduce mockup markup + classes.
+ * ==========================================================================*/
+function hud(){
+  const xp=state.game.xp;
+  return `<header class="hud">
+    <div class="hud__brand"><span class="mk">🍌</span><span class="nm">Nana<small>Gain Quest</small></span></div>
+    <div class="hud__stats">
+      <span class="hud-chip hud-chip--lvl">LVL <span class="num">${level(xp)}</span></span>
+      <span class="hud-chip hud-chip--streak">🔥 <span class="num">${streak()}</span></span>
+      <span class="hud-chip hud-chip--xp">✦ <span class="num">${fmtNum(xp)}</span></span>
+    </div>
+  </header>`;
+}
+function tabbar(active){
+  const tabs=[["today","🍌","Today"],["rotation","🗺️","Journey"],["recipes","🃏","Cards"],
+    ["shopping","🎒","Supply"],["tracker","🏁","Quest"],["settings","⚙️","Setup"]];
+  return `<nav class="tabbar" aria-label="Screens"><div class="tabbar__inner">`+
+    tabs.map(([h,ic,l])=>`<a class="tab" ${h===active?'aria-current="page"':''} href="#${h}"><span class="ic">${ic}</span>${l}</a>`).join("")+
+    `</div></nav>`;
+}
+function screen(active, inner){ return hud()+`<main class="screen">${inner}</main>`+tabbar(active); }
+
+/* ---- TODAY --------------------------------------------------------------- */
+let viewDate = todayISO();
+function viewToday(){
+  const iso=viewDate;
+  const d=dayStats(iso); const day=mealsForDate(iso);
+  const rDay=rotationDayFor(iso)+1;
+  const [kmin,kmax]=state.settings.kcalTarget;
+  const fed=fedMeals(iso);
+  const warn=!d.kcalInTarget;
+  const fuelPct=Math.min(100,Math.round(d.kcal/kmax*100));
+  const targetLeft=(kmin/kmax*100).toFixed(1);
+  const powerPct=Math.round(d.protein/state.settings.proteinTarget*100);
+  const toGo=Math.max(0,Math.round(kmin-d.kcal));
+  const cyc=currentCycle(iso);
+  const speech = warn
+    ? (toGo>0?`${toGo} kcal to go — feed me! 🍌`:`Whoa, over target — easy tiger 😅`)
+    : (fed===4?`Day complete! I'm stuffed 😋`:`Feeling good — keep feeding! 💪`);
+
+  const feedgrid = SLOTS.map(s=>{
+    const r=state.recipes[day[s]];
+    return `<div class="feedslot ${isFed(iso,s)?'is-fed':''}"><span class="ic">${SLOT_META[s].icon}</span><span class="nm">${esc(shortLabel(r))}</span></div>`;
+  }).join("");
+
+  const cards = SLOTS.map(s=>{
+    const rk=day[s]; const r=state.recipes[rk]; const st=recipeStats(rk);
+    return `<div class="feed-card ${isFed(iso,s)?'is-done':''}">
+      <div class="feed-card__slot"><span class="feed-card__icon">${SLOT_META[s].icon}</span><span class="feed-card__time">${SLOT_META[s].time}</span></div>
+      <div class="feed-card__body">
+        <div class="feed-card__name">${esc(r.name)}</div>
+        <div class="feed-card__macros"><span><b>${fmtNum(st.kcal)}</b> kcal</span><span><b>${Math.round(st.protein)}</b> g</span><span>€<b>${st.cost.toFixed(2)}</b></span></div>
+        <div class="feed-card__ings">${esc(ingList(rk))}</div>
+      </div>
+      <input class="feedbtn" type="checkbox" ${isFed(iso,s)?'checked':''} aria-label="Feed ${s}" data-feed="${s}">
+    </div>`;
+  }).join("");
+
+  const wl=waterLoggedFor(iso);
+  const waterBtns=[0.5,1,1.5,2].map(v=>`<button data-water="${v}" aria-pressed="${wl===v}">${v.toFixed(1).replace(/\.0$/,v===0.5?"":".0")}</button>`).join("");
+
+  return screen("today",
+    `<div class="section-title">Day ${rDay} of ${state.rotation.length} · ${fmtDate(iso)}<span class="spacer">${cyc?`cycle ${cyc} / 10`:'pre-plan'}</span></div>
+    <section class="mascot ${warn?'is-warn':''}">
+      <div class="mascot__speech">${esc(speech)}</div>
+      <div class="mascot__buddy">🍌</div>
+      <div class="fuelbar">
+        <div class="fuelbar__fill ${warn?'fuelbar__fill--warn':''}" style="width:${fuelPct}%"></div>
+        <div class="fuelbar__target" style="left:${targetLeft}%"></div>
+        <div class="fuelbar__label">${fmtNum(d.kcal)} / ${fmtNum(kmax)} kcal</div>
+      </div>
+      <div class="pills">
+        <span class="pill pill--power">⚡ <span class="num">${Math.round(d.protein)}</span> g protein</span>
+        <span class="pill pill--flame">🔥 ${streak()}-day streak</span>
+        <span class="pill pill--player">✦ +${xpForDate(iso)} XP</span>
+      </div>
+    </section>
+    <div class="tiles">
+      <div class="tile tile--energy"><div class="tile__label">🔥 Fuel</div><div class="tile__value">${fuelPct}<span class="u">%</span></div></div>
+      <div class="tile tile--power"><div class="tile__label">⚡ Power</div><div class="tile__value">${powerPct}<span class="u">%</span></div></div>
+      <div class="tile"><div class="tile__label">💶 Cost</div><div class="tile__value">${d.cost.toFixed(2)}<span class="u">€</span></div></div>
+    </div>
+    <div class="section-title">Feed Nana<span class="spacer">${fed} of 4 done</span></div>
+    <div class="feedgrid">${feedgrid}</div>
+    <div class="section-title">${iso===todayISO()?"Today's meals":fmtDate(iso)+"'s meals"}</div>
+    ${cards}
+    <section class="streak">
+      <span class="streak__flame">${fed===4?'🏆':'🎯'}</span>
+      <div class="streak__body"><b>${fed===4?'Boss defeated! +'+XP_BOSS_BONUS+' XP':'Daily boss: '+(toGo>0?toGo+' kcal to go':'feed all 4')}</b><span>${fed===4?'Day closed — nice work.':'Feed all 4 → close the day & bank +'+XP_BOSS_BONUS+' XP'}</span></div>
+    </section>
+    <div class="panel" style="margin-top:var(--s3)">
+      <div class="panel__pad row" style="flex-wrap:wrap;gap:var(--s3)">
+        <span style="font-size:22px">💧</span>
+        <div style="flex:1 1 100px"><div style="font-weight:800">Water · ${state.settings.waterPerDayL} L quest</div><span class="hint">${wl.toFixed(1)} L logged · ${fmtEUR(wl*state.settings.waterPricePerL)}</span></div>
+        <div class="toggle" role="group" aria-label="Water">${waterBtns}</div>
+      </div>
+    </div>
+    <div class="section-title">Jump to date</div>
+    <input class="input" type="date" id="jumpDate" value="${iso}">
+    ${iso!==todayISO()?`<button class="btn btn--ghost btn--sm" id="jumpToday" style="margin-top:8px">↩ Back to today</button>`:''}`
+  );
+}
+function shortLabel(r){
+  if(r.kind==="shake") return r.name.split("-")[0].slice(0,7);
+  return r.name.split(/[ ,]/)[0];
+}
+
+/* ---- JOURNEY (rotation) -------------------------------------------------- */
+function viewRotation(){
+  const curDay=rotationDayFor(todayISO());
+  const stops=state.rotation.map((day,i)=>{
+    const meals=SLOTS.map(s=>`<b>${esc(state.recipes[day[s]].name)}</b>`).join(" · ");
+    let kcal=0,protein=0,cost=0;
+    for(const s of SLOTS){ const st=recipeStats(day[s]); kcal+=st.kcal;protein+=st.protein;cost+=st.cost; }
+    const cls=i===curDay?'is-current':(i<curDay?'is-done':'');
+    return `<div class="stop ${cls}">
+      <div class="stop__rail"><div class="stop__node">${i+1}</div><div class="stop__line"></div></div>
+      <div class="stop__card">
+        <div class="stop__top"><span class="stop__day">Day ${i+1}</span>${i===curDay?'<span class="pill pill--player" style="padding:2px 8px">▶ today</span>':''}</div>
+        <div class="stop__meals">${meals}</div>
+        <div class="stop__stats">
+          <span class="pill pill--energy">🔥 <span class="num">${fmtNum(kcal)}</span></span>
+          <span class="pill pill--power">⚡ <span class="num">${Math.round(protein)}</span>g</span>
+          <span class="pill pill--ghost">💶 ${fmtEUR(cost)}</span>
+        </div>
+      </div>
+    </div>`;
+  }).join("");
+  return screen("rotation",
+    `<div class="section-title">Journey · 6-stop loop<span class="spacer">repeats 5× → 30 days</span></div>
+     <div class="journey">${stops}</div>
+     <div class="info" style="margin-top:var(--s3)"><h3>How the loop works</h3><ul><li>Six days of meals repeat five times across the month.</li><li>Tuna-bean salad lands twice every six days.</li><li>Today's stop is highlighted; completed days turn green.</li></ul></div>`
+  );
+}
+
+/* ---- CARDS (recipes + ingredient codex) ---------------------------------- */
+function viewRecipes(){
+  const cards=Object.keys(state.recipes).map(rk=>{
+    const r=state.recipes[rk]; const st=recipeStats(rk); const rar=rarity(st.kcal);
+    const rows=r.items.map(([k,q],idx)=>{
+      const g=ing(k); const is=itemStats(k,q);
+      const opts=Object.keys(state.ingredients).map(ik=>`<option value="${ik}" ${ik===k?'selected':''}>${esc(state.ingredients[ik].name)}</option>`).join("");
+      return `<div class="ing-row">
+        <select class="input" aria-label="Ingredient" data-recipe="${rk}" data-idx="${idx}" data-field="ingredient">${opts}</select>
+        <input class="input num" value="${q}" inputmode="decimal" aria-label="Amount" data-recipe="${rk}" data-idx="${idx}" data-field="amount">
+        <span class="ing-unit">${esc(g.unit)}</span>
+        <span class="ing-stats"><b>${fmtNum(is.kcal)}</b> kcal · €${is.cost.toFixed(2)}</span>
+        <button class="ing-remove" aria-label="Remove" data-recipe="${rk}" data-idx="${idx}" data-field="remove">✕</button>
+      </div>`;
+    }).join("");
+    return `<section class="fuelcard">
+      <div class="fuelcard__top">
+        <span class="fuelcard__emoji">${r.emoji||"🍽️"}</span>
+        <div><div class="fuelcard__id">${rk} · ${r.kind.toUpperCase()}</div><div class="fuelcard__name">${esc(r.name)}</div></div>
+        <span class="fuelcard__rarity pill ${rar.cls}">${rar.s}</span>
+      </div>
+      <div class="fuelcard__body">${rows}
+        <button class="ing-add" data-recipe="${rk}" data-field="add">＋ add ingredient</button>
+      </div>
+      <div class="fuelcard__foot">
+        <span class="pill pill--energy">🔥 <span class="num">${fmtNum(st.kcal)}</span> kcal</span>
+        <span class="pill pill--power">⚡ <span class="num">${Math.round(st.protein)}</span>g</span>
+        <span class="total">${fmtEUR(st.cost)}</span>
+      </div>
+    </section>`;
+  }).join("");
+
+  const codexRows=Object.keys(state.ingredients).map(k=>{
+    const g=state.ingredients[k]; const perUnit=g.packPrice/g.pack;
+    return `<tr>
+      <td>${esc(g.name)}</td>
+      <td class="u">${esc(g.unit)}</td>
+      <td><input class="cell-input" value="${g.kcalPer}" inputmode="decimal" data-ing="${k}" data-field="kcalPer" aria-label="kcal per unit"></td>
+      <td><input class="cell-input" value="${g.proteinPer}" inputmode="decimal" data-ing="${k}" data-field="proteinPer" aria-label="protein per unit"></td>
+      <td><input class="cell-input" value="${g.pack}" inputmode="decimal" data-ing="${k}" data-field="pack" aria-label="pack size"></td>
+      <td><input class="cell-input" value="${g.packPrice}" inputmode="decimal" data-ing="${k}" data-field="packPrice" aria-label="pack price"></td>
+      <td class="u">${fmtEUR(perUnit)}</td>
+    </tr>`;
+  }).join("");
+
+  return screen("recipes",
+    `<div class="section-title">Fuel cards · editable<span class="spacer">${Object.keys(state.recipes).length} collected</span></div>
+     ${cards}
+     <div class="section-title">Ingredient codex<span class="spacer">prices & nutrition</span></div>
+     <div class="panel"><div class="panel__pad" style="overflow-x:auto">
+       <table class="codex">
+         <thead><tr><th>Item</th><th>Unit</th><th>kcal/u</th><th>prot/u</th><th>Pack</th><th>Pack €</th><th>€/u</th></tr></thead>
+         <tbody>${codexRows}</tbody>
+       </table>
+     </div></div>
+     <div class="info" style="margin-top:var(--s3)"><h3>Everything recomputes live</h3><ul><li>Edit an amount or price → the card total, today's fuel bar, the supply run and treasury all update.</li></ul></div>`
+  );
+}
+
+/* ---- SUPPLY (shopping) --------------------------------------------------- */
+let shopFrom = null, shopTo = null;
+function viewShopping(){
+  if(!shopFrom){ shopFrom=state.settings.startDate; shopTo=addDaysISO(state.settings.startDate,state.settings.planDays-1); }
+  const list=shoppingList(shopFrom,shopTo);
+  const byPack=state.settings.shoppingByPack;
+  const freshTotal=list.fresh.reduce((a,l)=>a+l.cost,0);
+  const pantryTotal=list.pantry.reduce((a,l)=>a+l.cost,0);
+
+  const lootRows=lines=>lines.map(l=>`<div class="loot">
+    <div class="loot__body"><div class="loot__name">${esc(l.name)}</div><div class="loot__need">${fmtNum(l.total)} ${esc(l.unit)} needed</div></div>
+    <span class="loot__pack">${esc(l.packStr)}</span><span class="loot__price">${l.cost.toFixed(2)}</span></div>`).join("");
+
+  return screen("shopping",
+    `<div class="print-only" style="margin-bottom:12px"><strong>Supply run</strong> · ${fmtDate(shopFrom)} – ${fmtDate(shopTo)} · ${list.days} days</div>
+    <div class="section-title">Supply run<span class="spacer">${fmtDate(shopFrom)} – ${fmtDate(shopTo)} · ${list.days}d</span></div>
+    <div class="range-controls no-print">
+      <div class="field-grid" style="margin-bottom:var(--s3)">
+        <div class="field"><label class="field__label" for="from">From</label><input class="input" id="from" type="date" value="${shopFrom}"></div>
+        <div class="field"><label class="field__label" for="to">To</label><input class="input" id="to" type="date" value="${shopTo}"></div>
+      </div>
+      <div class="btn-row" style="margin-bottom:var(--s3)">
+        <button class="btn btn--sm" data-range="3">Next 3 days</button>
+        <button class="btn btn--sm" data-range="7">This week</button>
+        <button class="btn btn--sm btn--primary" data-range="month">Whole month</button>
+      </div>
+      <div class="row" style="justify-content:space-between">
+        <div class="toggle" role="group" aria-label="Cost mode">
+          <button data-cost="pack" aria-pressed="${byPack}">By pack</button>
+          <button data-cost="exact" aria-pressed="${!byPack}">Exact</button>
+        </div>
+        <div class="btn-row"><button class="btn btn--sm" id="copyList">📋 Copy</button><button class="btn btn--sm" id="printList">🖨 Print</button></div>
+      </div>
+    </div>
+    <div class="loot-head loot-head--fresh" style="margin-top:var(--s4)"><span class="ic">🛒</span><div><div class="nm">Fresh haul</div><div class="sub">every 3 days</div></div><span class="price">${fmtEUR(freshTotal)}</span></div>
+    <div class="loot-list">${lootRows(list.fresh)||'<div class="loot"><div class="loot__body"><div class="loot__need">nothing</div></div></div>'}</div>
+    <div class="loot-head loot-head--pantry"><span class="ic">🫙</span><div><div class="nm">Pantry stock</div><div class="sub">bulk restock</div></div><span class="price">${fmtEUR(pantryTotal)}</span></div>
+    <div class="loot-list">${lootRows(list.pantry)||'<div class="loot"><div class="loot__body"><div class="loot__need">nothing</div></div></div>'}</div>
+    <div class="loot-head loot-head--water"><span class="ic">💧</span><div><div class="nm">Water</div><div class="sub">${list.water.liters} L @ ${fmtEUR(state.settings.waterPricePerL)}/L</div></div><span class="price">${fmtEUR(list.water.cost)}</span></div>
+    <div style="height:var(--s3)"></div>
+    <div class="treasury">
+      <div class="treasury__row">🛒 Fresh ${fmtEUR(freshTotal)} · 🫙 Pantry ${fmtEUR(pantryTotal)} · 💧 Water ${fmtEUR(list.water.cost)}</div>
+      <div class="treasury__grand"><span style="font-weight:800">Total</span><b class="spacer" style="margin-left:auto">${fmtEUR(list.total)}</b></div>
+      <div class="row" style="margin-top:var(--s2)"><span class="hint">budget cap ${fmtEUR(state.settings.budgetCap)}</span>${budgetPill(state.settings.budgetCap-list.total)}</div>
+    </div>`
+  );
+}
+function budgetPill(buffer){
+  return buffer>=0
+    ? `<span class="pill pill--energy spacer">🏆 ${fmtEUR(buffer)} buffer left</span>`
+    : `<span class="pill pill--power spacer">⚠ ${fmtEUR(-buffer)} over cap</span>`;
+}
+
+/* ---- QUEST (tracker) ----------------------------------------------------- */
+function viewTracker(){
+  const b=monthlyBudget();
+  const dc=daysComplete();
+  const xp=state.game.xp;
+  const stops=[];
+  for(let c=1;c<=10;c++){
+    const from=(c-1)*3+1, to=Math.min(c*3,state.settings.planDays);
+    const done=!!state.checks.cycles[c];
+    const tag=CYCLE_TAGS[c];
+    const finalBoss=c===10;
+    stops.push(`<div class="qstop ${done?'is-done':''}">
+      <div class="qstop__rail"><div class="qstop__node">${finalBoss?'🏆':c}</div><div class="qstop__line"></div></div>
+      <div class="qstop__body"><div class="row"><div style="flex:1">
+        <div class="qstop__title">Cycle ${c} · days ${from}–${to}</div>
+        ${tag?`<span class="qstop__tag" ${finalBoss?'style="background:var(--flame-fill);color:var(--flame);border-color:color-mix(in srgb,var(--flame) 35%,transparent)"':''}>${tag}</span>`:'<div class="qstop__sub">🛒 fresh run</div>'}
+      </div><input class="feedbtn feedbtn--sm qstop__check" type="checkbox" ${done?'checked':''} aria-label="Cycle ${c} done" data-cycle="${c}"></div></div>
+    </div>`);
+  }
+  const dcPct=Math.round(dc/state.settings.planDays*100);
+  return screen("tracker",
+    `<section class="mascot">
+      <div class="mascot__speech">${dc>0?`${dc} of ${state.settings.planDays} days cleared! 💪`:`Feed Nana to start the quest 🍌`}</div>
+      <div class="mascot__buddy">🏁</div>
+      <div class="fuelbar"><div class="fuelbar__fill" style="width:${dcPct}%"></div><div class="fuelbar__label">${dc} / ${state.settings.planDays} days complete</div></div>
+      <div class="pills">
+        <span class="pill pill--player">✦ Level ${level(xp)}</span>
+        <span class="pill pill--flame">🔥 ${streak()}-day streak</span>
+        <span class="pill pill--energy">🏆 ${bossWins()} boss wins</span>
+      </div>
+    </section>
+    <div class="section-title">Quest map · 10 cycles<span class="spacer">3 days each</span></div>
+    <div class="panel"><div class="panel__pad"><div class="qpath">${stops.join("")}</div></div></div>
+    <div class="section-title">Treasury</div>
+    <div class="treasury">
+      <div class="treasury__row">🛒 Fresh ${fmtEUR(b.fresh)} · 🫙 Pantry ${fmtEUR(b.pantry)} · 💧 Water ${fmtEUR(b.water)}</div>
+      <hr class="divider">
+      <div class="treasury__grand"><span style="font-weight:800">Spent plan</span><b class="spacer" style="margin-left:auto">${fmtEUR(b.total)}</b></div>
+      <div class="row" style="margin-top:var(--s2)"><span class="hint">budget cap ${fmtEUR(b.cap)}</span>${budgetPill(b.buffer)}</div>
+    </div>`
+  );
+}
+
+/* ---- SETUP (settings) ---------------------------------------------------- */
+function viewSettings(){
+  const s=state.settings;
+  return screen("settings",
+    `<div class="section-title">Plan setup</div>
+    <div class="panel"><div class="panel__pad"><div class="field-grid">
+      <div class="field field--wide"><label class="field__label" for="s_start">Start date <span class="field__hint">· anchors Day 1</span></label><input class="input" id="s_start" type="date" value="${s.startDate}" data-set="startDate"></div>
+      <div class="field"><label class="field__label" for="s_days">Plan days</label><input class="input num" id="s_days" value="${s.planDays}" inputmode="numeric" data-set="planDays"></div>
+      <div class="field"><label class="field__label" for="s_wl">Water L/day</label><input class="input num" id="s_wl" value="${s.waterPerDayL}" inputmode="decimal" data-set="waterPerDayL"></div>
+      <div class="field"><label class="field__label" for="s_wp">Water €/L</label><input class="input num" id="s_wp" value="${s.waterPricePerL}" inputmode="decimal" data-set="waterPricePerL"></div>
+      <div class="field"><label class="field__label" for="s_cap">Budget cap €</label><input class="input num" id="s_cap" value="${s.budgetCap}" inputmode="numeric" data-set="budgetCap"></div>
+    </div></div></div>
+    <div class="section-title">Win conditions</div>
+    <div class="panel"><div class="panel__pad"><div class="field-grid">
+      <div class="field"><label class="field__label" for="s_kmin">🔥 kcal min</label><input class="input num" id="s_kmin" value="${s.kcalTarget[0]}" inputmode="numeric" data-set="kcalMin"></div>
+      <div class="field"><label class="field__label" for="s_kmax">🔥 kcal max</label><input class="input num" id="s_kmax" value="${s.kcalTarget[1]}" inputmode="numeric" data-set="kcalMax"></div>
+      <div class="field field--wide"><label class="field__label" for="s_prot">⚡ Protein min · g/day</label><input class="input num" id="s_prot" value="${s.proteinTarget}" inputmode="numeric" data-set="proteinTarget"></div>
+    </div>
+    <div class="pills" style="justify-content:flex-start;margin-top:var(--s4)">
+      <span class="pill pill--energy">🔥 ${fmtNum(s.kcalTarget[0])}–${fmtNum(s.kcalTarget[1])} kcal</span>
+      <span class="pill pill--power">⚡ ≥ ${s.proteinTarget} g</span>
+      <span class="pill pill--ghost">💶 ≤ ${fmtEUR(s.budgetCap)}</span>
+    </div></div></div>
+    <div class="section-title">Save file</div>
+    <div class="panel"><div class="panel__pad">
+      <div class="btn-row"><button class="btn btn--primary" id="exportJson">⤓ Export JSON</button><button class="btn" id="importBtn">⤒ Import JSON</button><input type="file" id="importFile" accept="application/json" style="display:none"></div>
+      <hr class="divider">
+      <button class="btn btn--danger btn--block" id="resetAll">↺ Reset to seed plan</button>
+      <p class="field__hint" style="margin-top:8px">Replaces all fuel cards, prices, checked meals, water & XP with the starter plan. Can't be undone.</p>
+    </div></div>
+    <div class="section-title">How the game works</div>
+    <div class="info"><h3>Small appetite, calorie-dense by design</h3><ul>
+      <li>Two shakes carry most of the day's fuel — easy to drink when appetite is low.</li>
+      <li>Two solid snacks add ⚡ protein & variety midday and afternoon.</li>
+      <li>A 6-day journey repeats 5× so the supply run stays predictable and cheap.</li>
+      <li>Feed all 4 meals to defeat the daily boss (+${XP_BOSS_BONUS} XP) and grow your 🔥 streak.</li>
+      <li>Every day clears 3,000–3,200 kcal · ≥110 g protein on a German-discounter budget.</li>
+    </ul></div>`
+  );
+}
+
+/* ============================================================================
+ * ROUTER + EVENT WIRING
+ * ==========================================================================*/
+const VIEWS = { today:viewToday, rotation:viewRotation, recipes:viewRecipes, shopping:viewShopping, tracker:viewTracker, settings:viewSettings };
+function currentRoute(){ const h=location.hash.replace("#",""); return VIEWS[h]?h:"today"; }
+function render(){
+  const route=currentRoute();
+  document.getElementById("app").innerHTML = VIEWS[route]();
+  wire(route);
+}
+function num(v,fallback){ const n=parseFloat(v); return isNaN(n)?fallback:Math.max(0,n); }
+
+function wire(route){
+  const app=document.getElementById("app");
+
+  if(route==="today"){
+    app.querySelectorAll("[data-feed]").forEach(el=>el.addEventListener("change",e=>{
+      const slot=e.target.dataset.feed, iso=viewDate;
+      setState(s=>{ s.checks.meals[iso]=s.checks.meals[iso]||{}; s.checks.meals[iso][slot]=e.target.checked; });
+    }));
+    app.querySelectorAll("[data-water]").forEach(el=>el.addEventListener("click",e=>{
+      const v=parseFloat(e.target.dataset.water);
+      logWater(viewDate, waterLoggedFor(viewDate)===v?0:v);
+    }));
+    const jd=app.querySelector("#jumpDate");
+    if(jd) jd.addEventListener("change",e=>{ viewDate=e.target.value||todayISO(); render(); });
+    const jt=app.querySelector("#jumpToday");
+    if(jt) jt.addEventListener("click",()=>{ viewDate=todayISO(); render(); });
+  }
+
+  if(route==="recipes"){
+    app.querySelectorAll("[data-field='amount']").forEach(el=>el.addEventListener("change",e=>{
+      const {recipe,idx}=e.target.dataset;
+      setState(s=>{ s.recipes[recipe].items[+idx][1]=num(e.target.value,0); });
+    }));
+    app.querySelectorAll("[data-field='ingredient']").forEach(el=>el.addEventListener("change",e=>{
+      const {recipe,idx}=e.target.dataset;
+      setState(s=>{ s.recipes[recipe].items[+idx][0]=e.target.value; });
+    }));
+    app.querySelectorAll("[data-field='remove']").forEach(el=>el.addEventListener("click",e=>{
+      const {recipe,idx}=e.target.dataset;
+      setState(s=>{ s.recipes[recipe].items.splice(+idx,1); });
+    }));
+    app.querySelectorAll("[data-field='add']").forEach(el=>el.addEventListener("click",e=>{
+      const {recipe}=e.target.dataset; const firstIng=Object.keys(state.ingredients)[0];
+      setState(s=>{ s.recipes[recipe].items.push([firstIng,1]); });
+    }));
+    app.querySelectorAll(".cell-input").forEach(el=>el.addEventListener("change",e=>{
+      const {ing:k,field}=e.target.dataset;
+      setState(s=>{ s.ingredients[k][field]=num(e.target.value,0); });
+    }));
+  }
+
+  if(route==="shopping"){
+    const from=app.querySelector("#from"), to=app.querySelector("#to");
+    if(from) from.addEventListener("change",e=>{ shopFrom=e.target.value; render(); });
+    if(to) to.addEventListener("change",e=>{ shopTo=e.target.value; render(); });
+    app.querySelectorAll("[data-range]").forEach(el=>el.addEventListener("click",e=>{
+      const r=e.target.dataset.range; const start=todayISO();
+      if(r==="3"){ shopFrom=start; shopTo=addDaysISO(start,2); }
+      else if(r==="7"){ shopFrom=start; shopTo=addDaysISO(start,6); }
+      else { shopFrom=state.settings.startDate; shopTo=addDaysISO(state.settings.startDate,state.settings.planDays-1); }
+      render();
+    }));
+    app.querySelectorAll("[data-cost]").forEach(el=>el.addEventListener("click",e=>{
+      setState(s=>{ s.settings.shoppingByPack = e.target.dataset.cost==="pack"; });
+    }));
+    const cp=app.querySelector("#copyList");
+    if(cp) cp.addEventListener("click",()=>copyShopping());
+    const pr=app.querySelector("#printList");
+    if(pr) pr.addEventListener("click",()=>window.print());
+  }
+
+  if(route==="tracker"){
+    app.querySelectorAll("[data-cycle]").forEach(el=>el.addEventListener("change",e=>{
+      const c=+e.target.dataset.cycle;
+      setState(s=>{ s.checks.cycles[c]=e.target.checked; });
+    }));
+  }
+
+  if(route==="settings"){
+    app.querySelectorAll("[data-set]").forEach(el=>el.addEventListener("change",e=>{
+      const f=e.target.dataset.set, v=e.target.value;
+      setState(s=>{
+        if(f==="startDate") s.settings.startDate=v||s.settings.startDate;
+        else if(f==="kcalMin") s.settings.kcalTarget[0]=num(v,3000);
+        else if(f==="kcalMax") s.settings.kcalTarget[1]=num(v,3200);
+        else if(f==="planDays"||f==="proteinTarget"||f==="budgetCap") s.settings[f]=Math.round(num(v,s.settings[f]));
+        else s.settings[f]=num(v,s.settings[f]);
+      });
+    }));
+    app.querySelector("#exportJson").addEventListener("click",exportJson);
+    app.querySelector("#importBtn").addEventListener("click",()=>app.querySelector("#importFile").click());
+    app.querySelector("#importFile").addEventListener("change",importJson);
+    app.querySelector("#resetAll").addEventListener("click",()=>{ if(confirm("Reset everything to the seed plan? This can't be undone.")) resetState(); });
+  }
+}
+
+/* ---- Export / Import / Copy ---------------------------------------------- */
+function exportJson(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob); const a=document.createElement("a");
+  a.href=url; a.download="mwg-backup.json"; a.click(); URL.revokeObjectURL(url);
+}
+function importJson(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const data=migrate(JSON.parse(reader.result));
+      if(!data.ingredients||!data.recipes) throw new Error("bad file");
+      state=data; state.game.xp=totalXp(state); persist(); render();
+      alert("Imported ✓");
+    }catch(err){ alert("Import failed: "+err.message); }
+  };
+  reader.readAsText(file);
+}
+function copyShopping(){
+  const list=shoppingList(shopFrom,shopTo);
+  const line=l=>`- ${l.name}: ${l.packStr} (${fmtEUR(l.cost)})`;
+  const txt=[`Supply run · ${shopFrom} – ${shopTo} · ${list.days} days`,"",
+    "🛒 FRESH", ...list.fresh.map(line), "",
+    "🫙 PANTRY", ...list.pantry.map(line), "",
+    `💧 Water: ${list.water.liters} L (${fmtEUR(list.water.cost)})`, "",
+    `TOTAL: ${fmtEUR(list.total)} (cap ${fmtEUR(state.settings.budgetCap)})`].join("\n");
+  if(navigator.clipboard){ navigator.clipboard.writeText(txt).then(()=>alert("Shopping list copied ✓"),()=>fallbackCopy(txt)); }
+  else fallbackCopy(txt);
+}
+function fallbackCopy(txt){
+  const ta=document.createElement("textarea"); ta.value=txt; document.body.appendChild(ta);
+  ta.select(); try{document.execCommand("copy");alert("Copied ✓");}catch(e){alert("Copy failed");} ta.remove();
+}
+
+/* ---- BOOT ---------------------------------------------------------------- */
+window.addEventListener("hashchange",()=>{ if(currentRoute()==="today") viewDate=todayISO(); render(); });
+render();
+</script>
+</body>
+</html>
